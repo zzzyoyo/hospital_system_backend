@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>fudan.se.lab2.repository.ReviewRelationRepository</OriginalElement>
+  <nodes>
+    <node x="1688.0" y="387.0">fudan.se.lab2.repository.MeetingRepository</node>
+    <node x="431.2109375" y="769.0">fudan.se.lab2.domain.PCmemberToTopic</node>
+    <node x="1275.2109375" y="769.0">fudan.se.lab2.domain.Invitation</node>
+    <node x="1858.5" y="843.0">org.springframework.security.core.userdetails.UserDetailsService</node>
+    <node x="256.0" y="387.0">fudan.se.lab2.repository.ReviewRelationRepository</node>
+    <node x="1087.2109375" y="769.0">fudan.se.lab2.domain.SecondDiscussion</node>
+    <node x="1418.2109375" y="769.0">fudan.se.lab2.domain.Topic</node>
+    <node x="1469.625" y="79.0">org.springframework.data.repository.Repository</node>
+    <node x="612.2109375" y="769.0">fudan.se.lab2.domain.Rebuttal</node>
+    <node x="369.0" y="982.0">fudan.se.lab2.controller.FileController</node>
+    <node x="138.2109375" y="769.0">fudan.se.lab2.domain.ReviewRelation</node>
+    <node x="1136.875" y="158.0">org.springframework.stereotype.Repository</node>
+    <node x="1334.0" y="387.0">fudan.se.lab2.repository.PaperRepository</node>
+    <node x="899.3359375" y="540.0">javax.persistence.Entity</node>
+    <node x="723.0" y="982.0">fudan.se.lab2.controller.DiscussionController</node>
+    <node x="1140.0" y="932.0">fudan.se.lab2.service.DiscussionService</node>
+    <node x="1153.0" y="387.0">fudan.se.lab2.repository.TopicRepository</node>
+    <node x="504.9999999999999" y="387.0">fudan.se.lab2.repository.WriterRepository</node>
+    <node x="450.0" y="843.0">org.springframework.web.bind.annotation.RestController</node>
+    <node x="196.00000000000003" y="982.0">fudan.se.lab2.controller.AuthController</node>
+    <node x="0.0" y="461.0">java.io.Serializable</node>
+    <node x="2112.5" y="843.0">org.springframework.context.annotation.Configuration</node>
+    <node x="542.0" y="982.0">fudan.se.lab2.controller.PaperController</node>
+    <node x="967.0" y="932.0">fudan.se.lab2.service.MeetingService</node>
+    <node x="1628.2109375" y="769.0">fudan.se.lab2.domain.Writer</node>
+    <node x="1523.2109375" y="769.0">fudan.se.lab2.domain.Paper</node>
+    <node x="948.9999999999999" y="387.0">fudan.se.lab2.repository.RebuttalRepository</node>
+    <node x="1336.0" y="932.0">fudan.se.lab2.service.FileService</node>
+    <node x="2275.5" y="922.0">fudan.se.lab2.config.WebConfig</node>
+    <node x="40.2109375" y="769.0">fudan.se.lab2.domain.User</node>
+    <node x="1371.875" y="158.0">org.springframework.data.repository.CrudRepository</node>
+    <node x="299.0" y="843.0">org.springframework.web.bind.annotation.CrossOrigin</node>
+    <node x="1281.625" y="79.0">org.springframework.data.repository.NoRepositoryBean</node>
+    <node x="1515.0" y="387.0">fudan.se.lab2.repository.UserRepository</node>
+    <node x="667.3359375" y="540.0">javax.persistence.Table</node>
+    <node x="1428.75" y="843.0">org.springframework.stereotype.Service</node>
+    <node x="2344.0" y="387.0">fudan.se.lab2.repository.SecondDiscussionRepository</node>
+    <node x="3.5" y="540.0">org.springframework.security.core.userdetails.UserDetails</node>
+    <node x="1481.125" y="0.0">org.springframework.stereotype.Indexed</node>
+    <node x="1645.0" y="932.0">fudan.se.lab2.service.AuthService</node>
+    <node x="1884.0" y="387.0">fudan.se.lab2.repository.InvitationRepository</node>
+    <node x="921.2109375" y="769.0">fudan.se.lab2.domain.Administrator</node>
+    <node x="2087.5" y="922.0">fudan.se.lab2.config.CorsConfig</node>
+    <node x="1796.0" y="932.0">fudan.se.lab2.service.JwtUserDetailsService</node>
+    <node x="2103.0" y="387.0">fudan.se.lab2.repository.AdministratorRepository</node>
+    <node x="692.9999999999999" y="387.0">fudan.se.lab2.repository.FirstDiscussionRepository</node>
+    <node x="311.2109375" y="769.0">fudan.se.lab2.domain.Meeting</node>
+    <node x="0.0" y="387.0">fudan.se.lab2.repository.PCmemberToTopicRepository</node>
+    <node x="1487.0" y="932.0">fudan.se.lab2.service.PaperService</node>
+    <node x="0.0" y="982.0">fudan.se.lab2.controller.MeetingController</node>
+    <node x="740.2109375" y="769.0">fudan.se.lab2.domain.FirstDiscussion</node>
+    <node x="2278.5" y="843.0">org.springframework.web.servlet.config.annotation.WebMvcConfigurer</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="fudan.se.lab2.repository.InvitationRepository" target="org.springframework.stereotype.Repository">
+      <point x="-49.749999999999886" y="-14.5" />
+      <point x="1933.75" y="257.0" />
+      <point x="1234.25" y="257.0" />
+      <point x="35.875" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.repository.SecondDiscussionRepository" target="org.springframework.data.repository.CrudRepository">
+      <point x="61.0" y="-14.5" />
+      <point x="2527.0" y="207.0" />
+      <point x="1518.5" y="207.0" />
+      <point x="70.125" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.service.JwtUserDetailsService" target="org.springframework.security.core.userdetails.UserDetailsService">
+      <point x="51.5" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.domain.Writer" target="javax.persistence.Entity">
+      <point x="0.0" y="-14.5" />
+      <point x="1674.7109375" y="589.0" />
+      <point x="988.4609375" y="589.0" />
+      <point x="42.625" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.repository.MeetingRepository" target="org.springframework.stereotype.Repository">
+      <point x="-44.0" y="-14.5" />
+      <point x="1732.0" y="277.0" />
+      <point x="1224.0" y="277.0" />
+      <point x="25.625" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.domain.SecondDiscussion" target="javax.persistence.Entity">
+      <point x="42.0" y="-14.5" />
+      <point x="1213.2109375" y="649.0" />
+      <point x="957.4609375" y="649.0" />
+      <point x="11.625" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.controller.PaperController" target="org.springframework.web.bind.annotation.CrossOrigin">
+      <point x="-40.25" y="-14.5" />
+      <point x="582.25" y="922.0" />
+      <point x="390.70000000000005" y="922.0" />
+      <point x="26.200000000000045" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.repository.PaperRepository" target="org.springframework.data.repository.CrudRepository">
+      <point x="40.25" y="-14.5" />
+      <point x="6.375" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.controller.PaperController" target="org.springframework.web.bind.annotation.RestController">
+      <point x="40.25" y="-14.5" />
+      <point x="662.75" y="912.0" />
+      <point x="557.1" y="912.0" />
+      <point x="30.599999999999966" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.domain.Administrator" target="javax.persistence.Entity">
+      <point x="36.5" y="-14.5" />
+      <point x="1030.7109375" y="669.0" />
+      <point x="949.7109375" y="669.0" />
+      <point x="3.875" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.repository.FirstDiscussionRepository" target="org.springframework.stereotype.Repository">
+      <point x="-59.0" y="-14.5" />
+      <point x="751.9999999999999" y="297.0" />
+      <point x="1172.75" y="297.0" />
+      <point x="-25.625" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.repository.RebuttalRepository" target="org.springframework.stereotype.Repository">
+      <point x="-46.0" y="-14.5" />
+      <point x="994.9999999999999" y="307.0" />
+      <point x="1183.0" y="307.0" />
+      <point x="-15.375" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.domain.Topic" target="javax.persistence.Entity">
+      <point x="21.25" y="-14.5" />
+      <point x="1481.9609375" y="609.0" />
+      <point x="972.9609375" y="609.0" />
+      <point x="27.125" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.domain.FirstDiscussion" target="javax.persistence.Table">
+      <point x="-40.25" y="-14.5" />
+      <point x="780.4609375" y="689.0" />
+      <point x="714.0859375" y="689.0" />
+      <point x="4.25" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.service.DiscussionService" target="org.springframework.stereotype.Service">
+      <point x="0.0" y="-14.5" />
+      <point x="1228.0" y="902.0" />
+      <point x="1453.75" y="902.0" />
+      <point x="-25.0" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.controller.DiscussionController" target="org.springframework.web.bind.annotation.RestController">
+      <point x="49.75" y="-14.5" />
+      <point x="872.25" y="892.0" />
+      <point x="587.7" y="892.0" />
+      <point x="61.19999999999999" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.domain.Rebuttal" target="javax.persistence.Entity">
+      <point x="27.0" y="-14.5" />
+      <point x="693.2109375" y="739.0" />
+      <point x="934.2109375" y="739.0" />
+      <point x="-11.625" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.repository.FirstDiscussionRepository" target="org.springframework.data.repository.CrudRepository">
+      <point x="59.0" y="-14.5" />
+      <point x="869.9999999999999" y="347.0" />
+      <point x="1416.5" y="347.0" />
+      <point x="-31.875" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.repository.ReviewRelationRepository" target="org.springframework.data.repository.CrudRepository">
+      <point x="57.25" y="-14.5" />
+      <point x="427.75" y="327.0" />
+      <point x="1391.0" y="327.0" />
+      <point x="-57.375" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.domain.ReviewRelation" target="javax.persistence.Table">
+      <point x="-38.25" y="-14.5" />
+      <point x="176.4609375" y="659.0" />
+      <point x="680.0859375" y="659.0" />
+      <point x="-29.75" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.repository.AdministratorRepository" target="org.springframework.stereotype.Repository">
+      <point x="-55.25" y="-14.5" />
+      <point x="2158.25" y="237.0" />
+      <point x="1244.5" y="237.0" />
+      <point x="46.125" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.config.CorsConfig" target="org.springframework.context.annotation.Configuration">
+      <point x="0.0" y="-14.5" />
+      <point x="-36.5" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.repository.WriterRepository" target="org.springframework.stereotype.Repository">
+      <point x="-42.0" y="-14.5" />
+      <point x="546.9999999999999" y="287.0" />
+      <point x="1162.5" y="287.0" />
+      <point x="-35.875" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.domain.Administrator" target="javax.persistence.Table">
+      <point x="-36.5" y="-14.5" />
+      <point x="957.7109375" y="679.0" />
+      <point x="722.5859375" y="679.0" />
+      <point x="12.75" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.controller.MeetingController" target="org.springframework.web.bind.annotation.CrossOrigin">
+      <point x="-44.0" y="-14.5" />
+      <point x="44.0" y="922.0" />
+      <point x="312.1" y="922.0" />
+      <point x="-52.39999999999998" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.domain.PCmemberToTopic" target="javax.persistence.Entity">
+      <point x="40.25" y="-14.5" />
+      <point x="551.9609375" y="729.0" />
+      <point x="926.4609375" y="729.0" />
+      <point x="-19.375" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.repository.UserRepository" target="org.springframework.stereotype.Repository">
+      <point x="-38.25" y="-14.5" />
+      <point x="1553.25" y="297.0" />
+      <point x="1213.75" y="297.0" />
+      <point x="15.375" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.repository.PCmemberToTopicRepository" target="org.springframework.data.repository.CrudRepository">
+      <point x="59.0" y="-14.5" />
+      <point x="177.0" y="317.0" />
+      <point x="1378.25" y="317.0" />
+      <point x="-70.125" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.repository.SecondDiscussionRepository" target="org.springframework.stereotype.Repository">
+      <point x="-61.0" y="-14.5" />
+      <point x="2405.0" y="217.0" />
+      <point x="1254.75" y="217.0" />
+      <point x="56.375" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.repository.TopicRepository" target="org.springframework.data.repository.CrudRepository">
+      <point x="40.25" y="-14.5" />
+      <point x="1273.75" y="367.0" />
+      <point x="1442.0" y="367.0" />
+      <point x="-6.375" y="14.5" />
+    </edge>
+    <edge source="org.springframework.data.repository.Repository" target="org.springframework.stereotype.Indexed">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.controller.DiscussionController" target="org.springframework.web.bind.annotation.CrossOrigin">
+      <point x="-49.75" y="-14.5" />
+      <point x="772.75" y="902.0" />
+      <point x="416.9" y="902.0" />
+      <point x="52.39999999999998" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.config.WebConfig" target="org.springframework.context.annotation.Configuration">
+      <point x="-29.0" y="-14.5" />
+      <point x="2304.5" y="897.0" />
+      <point x="2222.0" y="897.0" />
+      <point x="36.5" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.repository.RebuttalRepository" target="org.springframework.data.repository.CrudRepository">
+      <point x="46.0" y="-14.5" />
+      <point x="1087.0" y="357.0" />
+      <point x="1429.25" y="357.0" />
+      <point x="-19.125" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.domain.User" target="org.springframework.security.core.userdetails.UserDetails">
+      <point x="-26.0" y="-14.5" />
+      <point x="53.2109375" y="749.0" />
+      <point x="69.0" y="749.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.domain.Rebuttal" target="javax.persistence.Table">
+      <point x="-27.0" y="-14.5" />
+      <point x="639.2109375" y="689.0" />
+      <point x="705.5859375" y="689.0" />
+      <point x="-4.25" y="14.5" />
+    </edge>
+    <edge source="org.springframework.data.repository.CrudRepository" target="org.springframework.data.repository.Repository">
+      <point x="38.25" y="-14.5" />
+      <point x="1486.625" y="133.0" />
+      <point x="1531.125" y="133.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.domain.User" target="javax.persistence.Entity">
+      <point x="26.0" y="-14.5" />
+      <point x="105.2109375" y="699.0" />
+      <point x="903.2109375" y="699.0" />
+      <point x="-42.625" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.domain.Topic" target="javax.persistence.Table">
+      <point x="-21.25" y="-14.5" />
+      <point x="1439.4609375" y="619.0" />
+      <point x="748.0859375" y="619.0" />
+      <point x="38.25" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.domain.Paper" target="javax.persistence.Entity">
+      <point x="0.0" y="-14.5" />
+      <point x="1565.7109375" y="599.0" />
+      <point x="980.7109375" y="599.0" />
+      <point x="34.875" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.repository.InvitationRepository" target="org.springframework.data.repository.CrudRepository">
+      <point x="49.750000000000114" y="-14.5" />
+      <point x="2033.25" y="247.0" />
+      <point x="1493.0" y="247.0" />
+      <point x="44.625" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.controller.FileController" target="org.springframework.web.bind.annotation.CrossOrigin">
+      <point x="-38.25" y="-14.5" />
+      <point x="407.25" y="932.0" />
+      <point x="364.5" y="932.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.repository.PaperRepository" target="org.springframework.stereotype.Repository">
+      <point x="-40.25" y="-14.5" />
+      <point x="1374.25" y="307.0" />
+      <point x="1203.5" y="307.0" />
+      <point x="5.125" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.controller.AuthController" target="org.springframework.web.bind.annotation.RestController">
+      <point x="38.25" y="-14.5" />
+      <point x="310.75" y="952.0" />
+      <point x="495.9" y="952.0" />
+      <point x="-30.600000000000023" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.domain.PCmemberToTopic" target="javax.persistence.Table">
+      <point x="-40.25" y="-14.5" />
+      <point x="471.4609375" y="679.0" />
+      <point x="697.0859375" y="679.0" />
+      <point x="-12.75" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.service.JwtUserDetailsService" target="org.springframework.stereotype.Service">
+      <point x="-51.5" y="-14.5" />
+      <point x="1847.5" y="892.0" />
+      <point x="1520.4166666666667" y="892.0" />
+      <point x="41.66666666666674" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.repository.UserRepository" target="org.springframework.data.repository.CrudRepository">
+      <point x="38.25" y="-14.5" />
+      <point x="1629.75" y="287.0" />
+      <point x="1467.5" y="287.0" />
+      <point x="19.125" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.domain.Invitation" target="javax.persistence.Entity">
+      <point x="30.75" y="-14.5" />
+      <point x="1367.4609375" y="629.0" />
+      <point x="965.2109375" y="629.0" />
+      <point x="19.375" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.repository.PCmemberToTopicRepository" target="org.springframework.stereotype.Repository">
+      <point x="-59.0" y="-14.5" />
+      <point x="59.0" y="267.0" />
+      <point x="1142.0" y="267.0" />
+      <point x="-56.375" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.config.WebConfig" target="org.springframework.web.servlet.config.annotation.WebMvcConfigurer">
+      <point x="29.0" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="org.springframework.security.core.userdetails.UserDetails" target="java.io.Serializable">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.service.MeetingService" target="org.springframework.stereotype.Service">
+      <point x="0.0" y="-14.5" />
+      <point x="1043.5" y="892.0" />
+      <point x="1437.0833333333333" y="892.0" />
+      <point x="-41.66666666666674" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.domain.SecondDiscussion" target="javax.persistence.Table">
+      <point x="-42.0" y="-14.5" />
+      <point x="1129.2109375" y="659.0" />
+      <point x="731.0859375" y="659.0" />
+      <point x="21.25" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.repository.TopicRepository" target="org.springframework.stereotype.Repository">
+      <point x="-40.25" y="-14.5" />
+      <point x="-5.125" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.domain.Meeting" target="javax.persistence.Table">
+      <point x="-25.0" y="-14.5" />
+      <point x="336.2109375" y="669.0" />
+      <point x="688.5859375" y="669.0" />
+      <point x="-21.25" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.domain.Meeting" target="javax.persistence.Entity">
+      <point x="25.0" y="-14.5" />
+      <point x="386.2109375" y="719.0" />
+      <point x="918.7109375" y="719.0" />
+      <point x="-27.125" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.controller.MeetingController" target="org.springframework.web.bind.annotation.RestController">
+      <point x="44.0" y="-14.5" />
+      <point x="132.0" y="942.0" />
+      <point x="465.30000000000007" y="942.0" />
+      <point x="-61.19999999999999" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.domain.FirstDiscussion" target="javax.persistence.Entity">
+      <point x="40.25" y="-14.5" />
+      <point x="860.9609375" y="749.0" />
+      <point x="941.9609375" y="749.0" />
+      <point x="-3.875" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.service.PaperService" target="org.springframework.stereotype.Service">
+      <point x="0.0" y="-14.5" />
+      <point x="1556.0" y="912.0" />
+      <point x="1487.0833333333333" y="912.0" />
+      <point x="8.333333333333258" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.repository.ReviewRelationRepository" target="org.springframework.stereotype.Repository">
+      <point x="-57.25" y="-14.5" />
+      <point x="313.25" y="277.0" />
+      <point x="1152.25" y="277.0" />
+      <point x="-46.125" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.domain.Invitation" target="javax.persistence.Table">
+      <point x="-30.75" y="-14.5" />
+      <point x="1305.9609375" y="639.0" />
+      <point x="739.5859375" y="639.0" />
+      <point x="29.75" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.repository.AdministratorRepository" target="org.springframework.data.repository.CrudRepository">
+      <point x="55.25" y="-14.5" />
+      <point x="2268.75" y="227.0" />
+      <point x="1505.75" y="227.0" />
+      <point x="57.375" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.repository.WriterRepository" target="org.springframework.data.repository.CrudRepository">
+      <point x="42.0" y="-14.5" />
+      <point x="630.9999999999999" y="337.0" />
+      <point x="1403.75" y="337.0" />
+      <point x="-44.625" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.repository.MeetingRepository" target="org.springframework.data.repository.CrudRepository">
+      <point x="44.0" y="-14.5" />
+      <point x="1820.0" y="267.0" />
+      <point x="1480.25" y="267.0" />
+      <point x="31.875" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.domain.ReviewRelation" target="javax.persistence.Entity">
+      <point x="38.25" y="-14.5" />
+      <point x="252.9609375" y="709.0" />
+      <point x="910.9609375" y="709.0" />
+      <point x="-34.875" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.domain.User" target="javax.persistence.Table">
+      <point x="0.0" y="-14.5" />
+      <point x="79.2109375" y="649.0" />
+      <point x="671.5859375" y="649.0" />
+      <point x="-38.25" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.controller.AuthController" target="org.springframework.web.bind.annotation.CrossOrigin">
+      <point x="-38.25" y="-14.5" />
+      <point x="234.25000000000003" y="932.0" />
+      <point x="338.29999999999995" y="932.0" />
+      <point x="-26.200000000000045" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.service.FileService" target="org.springframework.stereotype.Service">
+      <point x="0.0" y="-14.5" />
+      <point x="1401.5" y="912.0" />
+      <point x="1470.4166666666667" y="912.0" />
+      <point x="-8.333333333333258" y="14.5" />
+    </edge>
+    <edge source="org.springframework.data.repository.CrudRepository" target="org.springframework.data.repository.NoRepositoryBean">
+      <point x="-38.25" y="-14.5" />
+      <point x="1410.125" y="133.0" />
+      <point x="1365.625" y="133.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.service.AuthService" target="org.springframework.stereotype.Service">
+      <point x="0.0" y="-14.5" />
+      <point x="1710.5" y="902.0" />
+      <point x="1503.75" y="902.0" />
+      <point x="25.0" y="14.5" />
+    </edge>
+    <edge source="fudan.se.lab2.controller.FileController" target="org.springframework.web.bind.annotation.RestController">
+      <point x="38.25" y="-14.5" />
+      <point x="483.75" y="962.0" />
+      <point x="526.5" y="962.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.4469325153374233" x="1165.5216197666439" y="721.4568505832086" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
