@@ -9,6 +9,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import sun.java2d.pipe.AAShapePipe;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Welcome to 2020 Software Engineering Lab2.
@@ -47,6 +51,8 @@ public class Lab2Application {
                 init_treatmentArea(treatmentAreaRepository);
                 init_doctor(treatmentAreaRepository,doctorRepository);
                 init_headNurse(treatmentAreaRepository,headNurseRepository);
+                init_wardNurse(treatmentAreaRepository,wardNurseRepository);
+
 
 
 
@@ -56,6 +62,48 @@ public class Lab2Application {
         };
     }
 
+    public void init_wardNurse(TreatmentAreaRepository treatmentAreaRepository,
+                               WardNurseRepository wardNurseRepository){
+        List<Ward_nurse> ward_nurseList = new ArrayList<>();
+        Ward_nurse ward_nurse1  = new Ward_nurse("wardNurse1","123456");
+        ward_nurse1.setTreatment_area(treatmentAreaRepository.findByType(1));
+        ward_nurseList.add(ward_nurse1);
+        Ward_nurse ward_nurse2  = new Ward_nurse("wardNurse2","123456");
+        ward_nurse2.setTreatment_area(treatmentAreaRepository.findByType(1));
+        ward_nurseList.add(ward_nurse2);
+        Ward_nurse ward_nurse3  = new Ward_nurse("wardNurse3","123456");
+        ward_nurse3.setTreatment_area(treatmentAreaRepository.findByType(1));
+        ward_nurseList.add(ward_nurse3);
+        Ward_nurse ward_nurse4  = new Ward_nurse("wardNurse4","123456");
+        ward_nurse4.setTreatment_area(treatmentAreaRepository.findByType(2));
+        ward_nurseList.add(ward_nurse4);
+        Ward_nurse ward_nurse5  = new Ward_nurse("wardNurse5","123456");
+        ward_nurse5.setTreatment_area(treatmentAreaRepository.findByType(2));
+        ward_nurseList.add(ward_nurse5);
+        Ward_nurse ward_nurse6  = new Ward_nurse("wardNurse6","123456");
+        ward_nurse6.setTreatment_area(treatmentAreaRepository.findByType(2));
+        ward_nurseList.add(ward_nurse6);
+        Ward_nurse ward_nurse7  = new Ward_nurse("wardNurse7","123456");
+        ward_nurse7.setTreatment_area(treatmentAreaRepository.findByType(4));
+        ward_nurseList.add(ward_nurse7);
+        Ward_nurse ward_nurse8  = new Ward_nurse("wardNurse8","123456");
+        ward_nurse8.setTreatment_area(treatmentAreaRepository.findByType(4));
+        ward_nurseList.add(ward_nurse8);
+        Ward_nurse ward_nurse9  = new Ward_nurse("wardNurse9","123456");
+        ward_nurse9.setTreatment_area(treatmentAreaRepository.findByType(4));
+        ward_nurseList.add(ward_nurse9);
+
+        Ward_nurse temp;
+        for(int i = 1;i<10;i++){
+
+        String name = "wardNurse"+i;
+         if(wardNurseRepository.findByUsername(name)==null){
+             wardNurseRepository.save(ward_nurseList.get(i-1));
+         }
+
+        }
+
+    }
     public void init_headNurse(TreatmentAreaRepository treatmentAreaRepository,
                                HeadNurseRepository headNurseRepository){
         Head_nurse head_nurse1 = new Head_nurse("headNurse1","123456");
@@ -67,43 +115,41 @@ public class Lab2Application {
 
 
         Head_nurse tempHeadNurse;
-        if((tempHeadNurse =headNurseRepository.findByUsername("headNurse1"))!=null){
-            headNurseRepository.delete(tempHeadNurse);
+        if((tempHeadNurse =headNurseRepository.findByUsername("headNurse1"))==null){
+            headNurseRepository.save(head_nurse1);
         }
-        if((tempHeadNurse =headNurseRepository.findByUsername("headNurse2"))!=null){
-            headNurseRepository.delete(tempHeadNurse);
+        if((tempHeadNurse =headNurseRepository.findByUsername("headNurse2"))==null){
+            headNurseRepository.save(head_nurse2);
         }
-        if((tempHeadNurse =headNurseRepository.findByUsername("headNurse4"))!=null){
-            headNurseRepository.delete(tempHeadNurse);
+        if((tempHeadNurse =headNurseRepository.findByUsername("headNurse4"))==null){
+            headNurseRepository.save(head_nurse4);
         }
-        headNurseRepository.save(head_nurse1);
-        headNurseRepository.save(head_nurse2);
-        headNurseRepository.save(head_nurse4);
+
+
+
         System.out.println(" headNurse count:  "+headNurseRepository.count());
     }
     public void init_doctor(TreatmentAreaRepository treatmentAreaRepository,DoctorRepository doctorRepository){
+        assert  treatmentAreaRepository.findByType(1)!= null;
         Doctor  doctor1 = new Doctor("doctor1","123456");
         Doctor tempDoctor;
-        if((tempDoctor = doctorRepository.findByUsername("doctor1"))!=null){
-            doctorRepository.delete(tempDoctor);
+        if((tempDoctor = doctorRepository.findByUsername("doctor1"))==null){
+            doctor1.setTreatment_area(treatmentAreaRepository.findByType(1));
+            doctorRepository.save(doctor1);
         }
         Doctor  doctor2 = new Doctor("doctor2","123456");
-        if((tempDoctor = doctorRepository.findByUsername("doctor2"))!=null){
-            doctorRepository.delete(tempDoctor);
+        if((tempDoctor = doctorRepository.findByUsername("doctor2"))==null){
+            doctor2.setTreatment_area(treatmentAreaRepository.findByType(2));
+            doctorRepository.save(doctor2);
+
         }
         Doctor  doctor4 = new Doctor("doctor4","123456");
-        if((tempDoctor = doctorRepository.findByUsername("doctor4"))!=null){
-            doctorRepository.delete(tempDoctor);
+        if((tempDoctor = doctorRepository.findByUsername("doctor4"))==null){
+            doctor4.setTreatment_area(treatmentAreaRepository.findByType(4));
+            doctorRepository.save(doctor4);
+
         }
-        assert  treatmentAreaRepository.findByType(1)!= null;
 
-        doctor1.setTreatment_area(treatmentAreaRepository.findByType(1));
-        doctor2.setTreatment_area(treatmentAreaRepository.findByType(2));
-        doctor4.setTreatment_area(treatmentAreaRepository.findByType(4));
-
-        doctorRepository.save(doctor1);
-        doctorRepository.save(doctor2);
-        doctorRepository.save(doctor4);
         System.out.println(" doctor count:  "+doctorRepository.count());
     }
 

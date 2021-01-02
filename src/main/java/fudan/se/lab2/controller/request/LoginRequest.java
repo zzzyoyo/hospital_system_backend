@@ -31,11 +31,11 @@ public class LoginRequest {
         this.password = password;
     }
 
-    public String getIdentity() {
+    public String getRole() {
         return role;
     }
 
-    public void setIdentity(String identity) {
+    public void setRole(String identity) {
         this.role = identity;
     }
 }

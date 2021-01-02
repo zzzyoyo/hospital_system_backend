@@ -36,10 +36,11 @@ public class AuthController {
         return ResponseEntity.ok(authService.register(request));
    */
 
-    @PostMapping("/login")
+    @PostMapping("/loginHospitalSystem")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         logger.debug("get a login post");
         logger.debug("LoginForm: " + loginRequest.toString());
+        System.out.println("auth controller");
         return ResponseEntity.ok(authService.login(loginRequest));    //有参ok 返回HttpStatus状态码和body内容
     }
 }

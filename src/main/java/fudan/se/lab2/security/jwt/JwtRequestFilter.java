@@ -51,12 +51,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     //过滤JWT请求，校验token是否正确
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
+        System.out.println("do filter start");
         response.setHeader("Access-Control-Allow-Origin","*");
         response.setHeader("Cache-Control","no-cache");
         final String requestTokenHeader = request.getHeader("Authorization");
          if(request.getRequestURI().contains("login")||request.getRequestURI().contains("register")){
+
             filterChain.doFilter(request, response);
+             System.out.println("do filter finish");
             return;
         }
         String username = null;
@@ -80,12 +82,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
 
         identity(username,jwtToken,request,response,filterChain);
+        System.out.println("do filter finish");
         
     }
 
     //身份验证
     public void identity(String username,String jwtToken,HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         //普通用户
+        System.out.print("start identity");
         if (doctorRepository.findByUsername(username) != null
                 && SecurityContextHolder.getContext().getAuthentication() == null) {
             if(!jwtTokenUtil.isTokenExpired(jwtToken)){

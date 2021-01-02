@@ -46,10 +46,12 @@ public class AuthService {
     public Map<String,String> login(LoginRequest loginRequest){
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
-        String identity = loginRequest.getIdentity();
+        String identity = loginRequest.getRole();
+        System.out.println("username:  "+username+"   passward:  "+password+"  identity"+identity);
         Medical_personnel user  = null;
         if(identity.equals("doctor")) {
             logger.debug("doctor login");
+            System.out.println("doctor login");
             user= doctorRepository.findByUsername(username);
         }else if(identity.equals("headNurse")){
             user = headNurseRepository.findByUsername(username);
@@ -63,6 +65,7 @@ public class AuthService {
         }
         if(!user.getPassword().equals(password))
             { logger.debug("wrong password!!");
+            System.out.println("right Pass："+user.getPassword()+" wrong pass"+password);
                 throw new BadCredentialsException("wrong password");
             }
         logger.debug(" login success");
@@ -88,6 +91,7 @@ public class AuthService {
             Emergency_nurse emergency_nurse = new Emergency_nurse(username,password);
              token = jwtTokenUtil.generateToken(emergency_nurse);
         }
+        System.out.println("send back");
 
         Map<String,String> map = new HashMap<>();
         map.put("token",token);
