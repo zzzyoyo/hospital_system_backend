@@ -36,17 +36,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     //定制认证规则
-    @Override
+   /* @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
-        /**
+
          * 在Spring Security中，认证过程称之为Authentication(验证)，
          * 指的是建立系统使用者信息( principal )的过程。使用者可以是一个用户、设备、或者其他
          * 可以在我们的应用中执行某种操作的其他系统。
-         */
+
         logger.debug("emit configure");
         //auth.userDetailsService(userDetailsService);
-    }
+    }*/
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

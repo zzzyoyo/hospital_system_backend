@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
  * Some properties about JWT.
  * You can change the value in `application.properties`.
  *
- * @author LBW
+
  */
 @Component
 @ConfigurationProperties(prefix = "jwt.token")
