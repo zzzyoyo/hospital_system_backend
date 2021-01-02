@@ -1,13 +1,10 @@
 package fudan.se.lab2.domain;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
+@Entity
+@Table(name = "emergency_nurse")
 public class Emergency_nurse implements Medical_personnel {
      @Id
     @Column(name="emergencyNurseId")
@@ -15,34 +12,28 @@ public class Emergency_nurse implements Medical_personnel {
     private Long emergencyNurseId;
     @Column //默认这一列叫username
     private String username;
-
+    @Column
+    private String telephone = "120";
 
     @Column
     private String password;
+    @Column
+    private int identity = 3;//3 emergency nurse
+
 
     @OneToOne
     private Treatment_area treatment_area;
 
-    private boolean accountNonExpired;
 
-    private boolean accountNonLocked;
-
-    private boolean credentialsNonExpired;
-
-    private boolean enabled;
 
     public Emergency_nurse(String name,String password){
-        this.accountNonExpired = true;
-        this.accountNonLocked = true;
-        this.credentialsNonExpired = true;
-        this.enabled = true;
         this.username = name;
         this.password = password;
 
     }
     public Emergency_nurse(){}
 
-    @Override
+    /*@Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         List<GrantedAuthority> authList = new ArrayList<GrantedAuthority>();
@@ -54,8 +45,12 @@ public class Emergency_nurse implements Medical_personnel {
 
         return authList;
 
-    }
+    }*/
 
+    @Override
+    public int getIdentity() {
+        return identity;
+    }
 
     public String getPassword() {
         return password;
@@ -66,25 +61,7 @@ public class Emergency_nurse implements Medical_personnel {
         return username;
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return this.accountNonExpired;
-    }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return  this.accountNonLocked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return this.credentialsNonExpired;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return this.enabled;
-    }
 
     public void setPassword(String password) {
         this.password = password;

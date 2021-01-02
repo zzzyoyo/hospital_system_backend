@@ -2,6 +2,7 @@ package fudan.se.lab2.domain;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -28,21 +29,15 @@ public class Doctor implements Medical_personnel {
     @Column
     private String telephone;
 
+
     @Column
-    private String email;
-
-
-    private boolean accountNonExpired;
-
-    private boolean accountNonLocked;
-
-    private boolean credentialsNonExpired;
-
-    private boolean enabled;
-
-
-
+    private int identity = 0;//0 doctor
     @Override
+    public int getIdentity() {
+        return identity;
+    }
+
+    /*@Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         List<GrantedAuthority> authList = new ArrayList<GrantedAuthority>();
@@ -60,7 +55,7 @@ public class Doctor implements Medical_personnel {
         // 轻症治疗区域的主治医生可以根据病人情况决定病人是否可以康复出院。
         return authList;
 
-    }
+    }*/
     public String getPassword() {
         return password;
     }
@@ -70,25 +65,6 @@ public class Doctor implements Medical_personnel {
         return username;
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return this.accountNonExpired;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return  this.accountNonLocked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return this.credentialsNonExpired;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return this.enabled;
-    }
 
     public void setPassword(String password) {
         this.password = password;
@@ -111,13 +87,11 @@ public class Doctor implements Medical_personnel {
     @OneToOne
     private Treatment_area treatment_area;
 
-    public Doctor(String name, String password, Treatment_area treatment_area) {
-        this.accountNonExpired = true;
-        this.accountNonLocked = true;
-        this.credentialsNonExpired = true;
-        this.enabled = true;
+    public Doctor(String name, String password) {
+
         this.username = name;
         this.password = password;
+        this.telephone = "120";
     }
 
     public Doctor(){}

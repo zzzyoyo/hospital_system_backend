@@ -22,31 +22,26 @@ public class Head_nurse implements  Medical_personnel{
     @Column //默认这一列叫username
     private String username;
 
-
+    @Column
+    private String telephone = "120";
     @Column
     private String password;
 
     @OneToOne
     private Treatment_area treatment_area;
 
-    private boolean accountNonExpired;
+    @Column
+    private int identity = 1;//1 head_nurse
 
-    private boolean accountNonLocked;
-
-    private boolean credentialsNonExpired;
-
-    private boolean enabled;
 
     public Head_nurse(String name,String password){
-        this.accountNonExpired = true;
-        this.accountNonLocked = true;
-        this.credentialsNonExpired = true;
-        this.enabled = true;
-        this.username = name;
+         this.username = name;
         this.password = password;
 
     }
     public Head_nurse(){}
+
+    /*
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
@@ -64,7 +59,7 @@ public class Head_nurse implements  Medical_personnel{
 
         return authList;
 
-    }
+    }*/
 
     public String getPassword() {
         return password;
@@ -76,23 +71,8 @@ public class Head_nurse implements  Medical_personnel{
     }
 
     @Override
-    public boolean isAccountNonExpired() {
-        return this.accountNonExpired;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return  this.accountNonLocked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return this.credentialsNonExpired;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return this.enabled;
+    public int getIdentity() {
+        return identity;
     }
 
     public void setPassword(String password) {

@@ -18,16 +18,8 @@ public class Ward_nurse  implements  Medical_personnel{
     @GeneratedValue(strategy = GenerationType.AUTO)//自动生成
     private Long wardNurseId;
 
-    private boolean accountNonExpired;
-
-    private boolean accountNonLocked;
-
-    private boolean credentialsNonExpired;
-
-    private boolean enabled;
-
-
-
+    @Column
+    private String telephone = "120";
     @Column //默认这一列叫username
     private String username;
 
@@ -37,19 +29,20 @@ public class Ward_nurse  implements  Medical_personnel{
     @ManyToOne
     private Treatment_area treatment_area;
 
+    @Column
+    private int identity =2;//2 ward_nurse
+
     @OneToMany(cascade =  CascadeType.MERGE)
     private Set<Patient> patients = new HashSet<>();
 
     public Ward_nurse(String name,String password){
-        this.accountNonExpired = true;
-        this.accountNonLocked = true;
-        this.credentialsNonExpired = true;
-        this.enabled = true;
+
+
         this.username = name;
         this.password = password;
     }
     public Ward_nurse(){}
-    @Override
+   /* @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         List<GrantedAuthority> authList = new ArrayList<GrantedAuthority>();
@@ -61,7 +54,11 @@ public class Ward_nurse  implements  Medical_personnel{
 
         return authList;
 
-    }
+    }*/
+   @Override
+   public int getIdentity() {
+       return identity;
+   }
 
     public String getPassword() {
         return password;
@@ -72,25 +69,7 @@ public class Ward_nurse  implements  Medical_personnel{
         return username;
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return this.accountNonExpired;
-    }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return  this.accountNonLocked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return this.credentialsNonExpired;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return this.enabled;
-    }
 
     public void setPassword(String password) {
         this.password = password;

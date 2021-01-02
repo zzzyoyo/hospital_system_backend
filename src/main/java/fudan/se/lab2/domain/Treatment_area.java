@@ -51,7 +51,12 @@ public class Treatment_area {
 
 
 
+   public Treatment_area(int type){
+       this.type = type;
+   }
+   public Treatment_area(){
 
+   }
 
     public Treatment_area(Head_nurse head_nurse,Doctor doctor){
         this.head_nurse = head_nurse;
