@@ -19,10 +19,12 @@ public class Patient {
     private String name;
 
     @Column
+    private int treatmentArea = 0;
+
+    @Column
     private int condition_rating;//0：轻症 1： 重症 2：危重症
     @Column
     private int living_status;//0：住院 1：出院 2：死亡
-
     @OneToOne
     private Bed bed;
 
@@ -90,6 +92,14 @@ public class Patient {
 
     public Long getId() {
         return id;
+    }
+
+    public int getTreatmentArea() {
+        return treatmentArea;
+    }
+
+    public void setTreatmentArea(int treatmentArea) {
+        this.treatmentArea = treatmentArea;
     }
 
     public Set<Daily_state_records> getDaily_state_records() {

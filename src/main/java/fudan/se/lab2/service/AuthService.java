@@ -1,20 +1,20 @@
 package fudan.se.lab2.service;
 
 
+import fudan.se.lab2.controller.request.AddPatientRequest;
 import fudan.se.lab2.controller.request.LoginRequest;
 import fudan.se.lab2.controller.request.RegisterRequest;
 import fudan.se.lab2.domain.*;
 import fudan.se.lab2.exception.BadCredentialsException;
+import fudan.se.lab2.exception.UsernameHasBeenRegisteredException;
 import fudan.se.lab2.exception.UsernameNotFoundException;
-import fudan.se.lab2.repository.DoctorRepository;
-import fudan.se.lab2.repository.EmergencyNurseRepository;
-import fudan.se.lab2.repository.HeadNurseRepository;
-import fudan.se.lab2.repository.WardNurseRepository;
+import fudan.se.lab2.repository.*;
 import fudan.se.lab2.security.jwt.JwtConfigProperties;
 import fudan.se.lab2.security.jwt.JwtTokenUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -26,23 +26,34 @@ public class AuthService {
     private HeadNurseRepository headNurseRepository;
     private WardNurseRepository wardNurseRepository;
     private EmergencyNurseRepository emergencyNurseRepository;
+    private PatientRepository patientRepository;
     Logger logger = LoggerFactory.getLogger(AuthService.class);
+
     @Autowired
     public AuthService(DoctorRepository doctorRepository,
                        HeadNurseRepository headNurseRepository,
                        WardNurseRepository wardNurseRepository,
-                       EmergencyNurseRepository emergencyNurseRepository){
+                       EmergencyNurseRepository emergencyNurseRepository,
+                       PatientRepository patientRepository){
         this.doctorRepository = doctorRepository;
         this.headNurseRepository = headNurseRepository;
         this.wardNurseRepository  = wardNurseRepository;
         this.emergencyNurseRepository = emergencyNurseRepository;
-
+         this.patientRepository = patientRepository;
     }
 
-    public void Register(RegisterRequest registerRequest){
+    public String addPatient(AddPatientRequest addPatientRequest) {
+        String name = addPatientRequest.getName();
+        int living_status = addPatientRequest.getLiving_status();
+        int conditional_rating = addPatientRequest.getCondition_rating();
+        if (patientRepository.findByName(name) != null) {
+            throw new UsernameHasBeenRegisteredException(name);
 
+        }
+        Patient patient = new Patient(name, conditional_rating, living_status);
+        patientRepository.save(patient);
+        return "success";
     }
-
     public Map<String,String> login(LoginRequest loginRequest){
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();

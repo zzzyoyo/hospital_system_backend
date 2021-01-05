@@ -1,6 +1,7 @@
 package fudan.se.lab2.controller;
 
 
+import fudan.se.lab2.controller.request.AddPatientRequest;
 import fudan.se.lab2.controller.request.LoginRequest;
 import fudan.se.lab2.controller.request.RegisterRequest;
 import fudan.se.lab2.service.AuthService;
@@ -28,13 +29,7 @@ public class AuthController {
         this.authService = authService;
 
     }
-   /* @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        logger.debug("get a register post");
-        logger.debug("RegistrationForm: " + request.toString());
 
-        return ResponseEntity.ok(authService.register(request));
-   */
 
     @PostMapping("/loginHospitalSystem")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {

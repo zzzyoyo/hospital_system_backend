@@ -42,19 +42,7 @@ public class Ward_nurse  implements  Medical_personnel{
         this.password = password;
     }
     public Ward_nurse(){}
-   /* @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
 
-        List<GrantedAuthority> authList = new ArrayList<GrantedAuthority>();
-        // 每个治疗区域有多个病房护士， 负责患者的治疗及每天的信息登记
-        // （包括体温、存在的症状、生命状态、核酸检测结果等） 。
-        authList.add(new SimpleGrantedAuthority("Record_Patient_Status"));
-        //急诊护士可以在系统中登记病人基本信息以及病情等级
-        authList.add(new SimpleGrantedAuthority("Check_Patient_Status"));
-
-        return authList;
-
-    }*/
    @Override
    public int getIdentity() {
        return identity;
@@ -69,7 +57,16 @@ public class Ward_nurse  implements  Medical_personnel{
         return username;
     }
 
+    public Set<Patient> getPatients() {
+        return patients;
+    }
 
+    public void setPatients(Set<Patient> patients) {
+        this.patients = patients;
+    }
+    public void addPatients(Patient patient){
+        this.patients.add(patient);
+    }
 
     public void setPassword(String password) {
         this.password = password;

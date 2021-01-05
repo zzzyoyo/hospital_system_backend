@@ -63,6 +63,10 @@ public class Treatment_area {
         this.doctor = doctor;
     }
 
+    public int getType() {
+        return type;
+    }
+
     public void setBeds(Set<Bed> beds) {
         this.beds = beds;
     }

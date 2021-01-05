@@ -16,21 +16,33 @@ public class Daily_state_records {
     @Column
     private Date date;
     @Column
-    private int nucleic_acid_test_result;
+    private int nucleic_acid_test_result;//阴性，阳性
     @Column
     private int living_status;//0：住院 1：出院 2：死亡
+    @Column
+    private String symptom;//正常......
+
 
     @ManyToOne(cascade=CascadeType.MERGE)
     private Patient patient;
 
     public Daily_state_records(){}
 
-    public Daily_state_records(double temperature,int nucleic_acid_test_result,int living_status,Patient patient){
+    public Daily_state_records(double temperature,int nucleic_acid_test_result,int living_status,String  symptom,Patient patient){
         this.patient = null;
         this.living_status = living_status;
         this.temperature = temperature;
         this.nucleic_acid_test_result = nucleic_acid_test_result;
         this.date = new Date();
+        this.symptom = symptom;
+    }
+
+    public void setSymptom(String symptom) {
+        this.symptom = symptom;
+    }
+
+    public String getSymptom() {
+        return symptom;
     }
 
     public Date getDate() {
