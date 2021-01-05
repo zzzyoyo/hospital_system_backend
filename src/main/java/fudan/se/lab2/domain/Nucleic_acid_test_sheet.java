@@ -38,7 +38,9 @@ public class Nucleic_acid_test_sheet {
 
     }
 
-
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
 
     public void setConditional_rating(int conditional_rating) {
         this.conditional_rating = conditional_rating;

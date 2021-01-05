@@ -1,5 +1,6 @@
 package fudan.se.lab2.controller;
 
+import fudan.se.lab2.controller.request.OnlyNameRequest;
 import fudan.se.lab2.service.DoctorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@RestController
+@CrossOrigin
 public class DoctorController{
     private DoctorService  doctorService;
     Logger logger = LoggerFactory.getLogger(AuthController.class);
@@ -17,9 +20,12 @@ public class DoctorController{
 
     }
     @PostMapping("/doctor")
-    public ResponseEntity<?>initalDoctor(@RequestParam String username){
+    //public ResponseEntity<?>initalDoctor(@RequestParam(required = false) String username){
+    public ResponseEntity<?>initalDoctor(@RequestBody OnlyNameRequest onlyNameRequest){
+
         logger.debug("get a doctor initial Request ");
 
+        String username = onlyNameRequest.getUsername();
         System.out.println("get a doctor initial Request");
         return ResponseEntity.ok(doctorService.initialDoctor(username));    //有参ok 返回HttpStatus状态码和body内容
 

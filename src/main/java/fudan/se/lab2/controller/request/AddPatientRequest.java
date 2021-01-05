@@ -1,18 +1,28 @@
 package fudan.se.lab2.controller.request;
 
 import javax.persistence.Column;
+import java.util.Date;
 
 public class AddPatientRequest {
     private String name;
     private int condition_rating;//0：轻症 1： 重症 2：危重症
-
-    private int living_status;//3：住院 4：出院 5：死亡
+    private String result;
+    private Date date;
 
     public AddPatientRequest(){}
-    public AddPatientRequest(String name,int living_status,int condition_rating){
-        this.living_status = living_status;
+    public AddPatientRequest(String name,int condition_rating,String result,Date date){
+        this.result = result;
         this.name = name;
         this.condition_rating = condition_rating;
+        this.date = date;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public String getResult() {
+        return result;
     }
 
     public String getName() {
@@ -23,7 +33,5 @@ public class AddPatientRequest {
         return condition_rating;
     }
 
-    public int getLiving_status() {
-        return living_status;
-    }
+
 }

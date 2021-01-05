@@ -42,18 +42,7 @@ public class AuthService {
          this.patientRepository = patientRepository;
     }
 
-    public String addPatient(AddPatientRequest addPatientRequest) {
-        String name = addPatientRequest.getName();
-        int living_status = addPatientRequest.getLiving_status();
-        int conditional_rating = addPatientRequest.getCondition_rating();
-        if (patientRepository.findByName(name) != null) {
-            throw new UsernameHasBeenRegisteredException(name);
 
-        }
-        Patient patient = new Patient(name, conditional_rating, living_status);
-        patientRepository.save(patient);
-        return "success";
-    }
     public Map<String,String> login(LoginRequest loginRequest){
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
@@ -66,10 +55,15 @@ public class AuthService {
             user= doctorRepository.findByUsername(username);
         }else if(identity.equals("headNurse")){
             user = headNurseRepository.findByUsername(username);
+            System.out.println("headNurse login");
         }else if(identity.equals("wardNurse")){
+            System.out.println("wardNurse login");
             user = wardNurseRepository.findByUsername(username);
+
         }else if (identity.equals("emergencyNurse")){
+            System.out.println("emergency login");
             user = emergencyNurseRepository.findByUsername(username);
+
         }
         if(user == null){
           throw new UsernameNotFoundException(username);
@@ -106,6 +100,7 @@ public class AuthService {
 
         Map<String,String> map = new HashMap<>();
         map.put("token",token);
+
         map.put("userDetails",loginRequest.getUsername());
         return map;
 
