@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 public class DoctorController{
     private DoctorService  doctorService;
-    Logger logger = LoggerFactory.getLogger(AuthController.class);
+    Logger logger = LoggerFactory.getLogger(DoctorController.class);
 
     @Autowired
     public DoctorController(DoctorService doctorService){

@@ -43,7 +43,7 @@ public class AuthService {
     }
 
 
-    public Map<String,String> login(LoginRequest loginRequest){
+    public Map<String,Object> login(LoginRequest loginRequest){
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
         String identity = loginRequest.getRole();
@@ -98,10 +98,12 @@ public class AuthService {
         }
         System.out.println("send back");
 
-        Map<String,String> map = new HashMap<>();
+        Map<String,Object> map = new HashMap<>();
         map.put("token",token);
+        Map<String ,String>temp = new HashMap<>();
+        temp.put("username",loginRequest.getUsername());
 
-        map.put("userDetails",loginRequest.getUsername());
+        map.put("userDetails",temp);
         return map;
 
 
