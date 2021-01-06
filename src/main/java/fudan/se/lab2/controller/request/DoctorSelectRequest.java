@@ -11,10 +11,9 @@ public class DoctorSelectRequest {
         this.area_type= area_type;
         this.leave = leave;
         this.status = status;
-
     }
 
-    public int getType() {
+    public int getArea_type() {
         return area_type;
     }
 

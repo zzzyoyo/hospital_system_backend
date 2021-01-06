@@ -263,11 +263,6 @@ public class DoctorService {
         returnMap.put("patient_tableData",p_set);
         return returnMap;
 
-
-
-
-
-
     }
 
     /**

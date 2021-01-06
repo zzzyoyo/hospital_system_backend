@@ -31,10 +31,9 @@ public class DoctorController{
     @PostMapping("/select")
     public ResponseEntity<?>select(@RequestBody DoctorSelectRequest doctorSelectRequest){
         logger.debug("get a doctor select Request ");
-
         System.out.println("get a doctor select Request");
         //int type, int leave,int trans,int status
-        return ResponseEntity.ok(doctorService.select(doctorSelectRequest.getType(),
+        return ResponseEntity.ok(doctorService.select(doctorSelectRequest.getArea_type(),
                 doctorSelectRequest.getLeave(),
                 doctorSelectRequest.getTrans(),
                 doctorSelectRequest.getStatus()));    //有参ok 返回HttpStatus状态码和body内容
