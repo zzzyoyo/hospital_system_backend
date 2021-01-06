@@ -20,12 +20,10 @@ public class DoctorController{
 
     }
     @PostMapping("/doctor")
-    //public ResponseEntity<?>initalDoctor(@RequestParam(required = false) String username){
-    public ResponseEntity<?>initalDoctor(@RequestBody OnlyNameRequest onlyNameRequest){
-
+    //public ResponseEntity<?>initalDoctor(@RequestParam (required = false)String username){
+    public ResponseEntity<?>initalDoctor(@RequestParam (name = "username")String username){
         logger.debug("get a doctor initial Request ");
 
-        String username = onlyNameRequest.getUsername();
         System.out.println("get a doctor initial Request");
         return ResponseEntity.ok(doctorService.initialDoctor(username));    //有参ok 返回HttpStatus状态码和body内容
 

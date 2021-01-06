@@ -8,9 +8,11 @@ import fudan.se.lab2.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Date;
+import java.util.*;
 
 @Service
 public class ENurseService {
@@ -36,6 +38,82 @@ public class ENurseService {
         this.patientRepository = patientRepository;
         this.nucleicAcidTestSheetRepository = nucleicAcidTestSheetRepository;
     }
+
+    public Map<String, Set> intialENurse(String username){
+        Map<String ,Set>returnMap = new HashMap<>();
+        Iterable<Patient > allPatients = patientRepository.findAll();
+        Set<Map> p_set = new HashSet<>();
+        for(Patient patient: allPatients){
+            Map<String , Object>temp = new HashMap<>();
+            temp.put("patientID",patient.getId());
+            temp.put("username",patient.getName());
+            temp.put("condition_rating",patient.getCondition_rating());
+            temp.put("living_status",patient.getLiving_status());
+            p_set.add(temp);
+        }
+        returnMap.put("patient_tableData",p_set);
+        return returnMap;
+
+    }
+
+    /**
+     *    area_type: int,//轻、重、危重区域分别为0、1、2，-1代表不筛选
+     *   isolated: int,//表示是否在隔离区，0是，1否，2不筛选
+     *   rating: int,//0：轻症 1： 重症 2：危重，3不筛选
+     *   status: int//0：住院 1：出院 2：死亡,3不筛选
+     * @param area_type
+     * @param isolated
+     * @param rating
+     * @param status
+     * @return
+     */
+    public Map<String, Set> selectAll(int area_type,int isolated,int rating,int status){
+        Map <String,Set>returnMap = new HashMap<>();
+        Iterable<Patient> patients = selectStatus(selectRating(selectArea(area_type),rating),status);
+
+        Set<Map> p_set = new HashSet<>();
+        for(Patient patient: patients){
+            Map<String , Object>temp = new HashMap<>();
+            temp.put("patientID",patient.getId());
+            temp.put("username",patient.getName());
+            temp.put("condition_rating",patient.getCondition_rating());
+            temp.put("living_status",patient.getLiving_status());
+            p_set.add(temp);
+        }
+        returnMap.put("patient_tableData",p_set);
+        return returnMap;
+
+    }
+    public Iterable<Patient>selectArea(int area_type) {
+
+        if (area_type == 1 || area_type == 2 || area_type == 4 || area_type == 0) {
+            return patientRepository.findByTreatmentArea(area_type);
+        }
+        return patientRepository.findAll();
+    }
+    public Iterable<Patient> selectRating(Iterable<Patient> areaPatients,int rating){
+        Set<Patient> ratingPatients = new HashSet<>();
+        if(rating ==1||rating ==2||rating ==0){
+            for(Patient patient:areaPatients){
+                if(patient.getCondition_rating() == rating)
+                    ratingPatients.add(patient);
+            }
+            return ratingPatients;
+        }
+        return areaPatients;
+    }
+    public Iterable <Patient> selectStatus(Iterable<Patient> ratingPatients,int status){
+        Set<Patient> statusPatients = new HashSet<>();
+        if(status ==1||status ==2||status ==0){
+            for(Patient patient:ratingPatients){
+                if(patient.getLiving_status()== status)
+                    statusPatients.add(patient);
+            }
+            return statusPatients;
+        }
+        return ratingPatients;
+    }
+
     public String addPatient(AddPatientRequest addPatientRequest) {
         String name = addPatientRequest.getName();
         Date date = addPatientRequest.getDate();
