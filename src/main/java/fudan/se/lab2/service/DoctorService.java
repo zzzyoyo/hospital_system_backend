@@ -75,10 +75,12 @@ public class DoctorService {
             Map<String, Object> temp = new HashMap<>();
             temp.put("name", nurse.getUsername());
 
+            Set<String> patientSet = new HashSet<>();
             for (Patient p : nurse.getPatients()) {
-                temp.put("patient", p.getName());
+                patientSet.add(p.getName());
                 patients.add(p);
             }
+            temp.put("patients", patientSet);
             n_set.add(temp);
         }
         returnMap.put("wardNurse_tableData",n_set);
