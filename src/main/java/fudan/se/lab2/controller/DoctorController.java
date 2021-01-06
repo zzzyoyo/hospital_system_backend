@@ -1,6 +1,8 @@
 package fudan.se.lab2.controller;
 
 import fudan.se.lab2.controller.request.OnlyNameRequest;
+import fudan.se.lab2.controller.request.RatingReviseRequest;
+import fudan.se.lab2.controller.request.StatusReviseRequest;
 import fudan.se.lab2.service.DoctorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,23 +33,25 @@ public class DoctorController{
 
     }
     @PostMapping("/ratingRevise")
-    public ResponseEntity<?>ratingRevise(@RequestParam(name = "patientID")  int patientID,@RequestParam(name ="condition_rating") int condition_rating){
+//    public ResponseEntity<?>ratingRevise(@RequestParam(name = "patientID")  int patientID,@RequestParam(name ="condition_rating") int condition_rating){
+    public ResponseEntity<?>ratingRevise(@RequestBody RatingReviseRequest ratingReviseRequest){
         logger.debug("get a ratingRevise Request ");
 
         System.out.println("get a ratingRevise Request ");
 
 
-        return ResponseEntity.ok(doctorService.ratingRevise(patientID,condition_rating));    //有参ok 返回HttpStatus状态码和body内容
+        return ResponseEntity.ok(doctorService.ratingRevise(ratingReviseRequest.getPatientID(),ratingReviseRequest.getCondition_rating()));    //有参ok 返回HttpStatus状态码和body内容
 
     }
     @PostMapping("/statusRevise")
-    public ResponseEntity<?>statusRevise(@RequestParam(name = "patientID")  int patientID,@RequestParam(name ="statusRevise") int statusRevise){
+//    public ResponseEntity<?>statusRevise(@RequestParam(name = "patientID")  int patientID,@RequestParam(name ="statusRevise") int statusRevise){
+    public ResponseEntity<?>statusRevise(@RequestBody StatusReviseRequest statusReviseRequest){
         logger.debug("get a statusRevise Request ");
 
         System.out.println("get a ratingRevise Request ");
 
 
-        return ResponseEntity.ok(doctorService.statusRevise(patientID,statusRevise));    //有参ok 返回HttpStatus状态码和body内容
+        return ResponseEntity.ok(doctorService.statusRevise(statusReviseRequest.getPatientID(),statusReviseRequest.getLiving_status()));    //有参ok 返回HttpStatus状态码和body内容
 
     }
 
