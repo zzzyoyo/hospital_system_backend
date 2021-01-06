@@ -1,5 +1,6 @@
 package fudan.se.lab2.service;
 
+import fudan.se.lab2.controller.request.AddAcidTestRequest;
 import fudan.se.lab2.domain.*;
 import fudan.se.lab2.exception.UsernameNotFoundException;
 import fudan.se.lab2.repository.*;
@@ -19,6 +20,8 @@ public class DoctorService {
     private WardNurseRepository wardNurseRepository;
     private EmergencyNurseRepository emergencyNurseRepository;
     private PatientRepository patientRepository;
+    private BedRepository bedRepository;
+    private NucleicAcidTestSheetRepository nucleicAcidTestSheetRepository;
     Logger logger = LoggerFactory.getLogger(AuthService.class);
 
     @Autowired
@@ -26,12 +29,17 @@ public class DoctorService {
                          HeadNurseRepository headNurseRepository,
                          WardNurseRepository wardNurseRepository,
                          EmergencyNurseRepository emergencyNurseRepository,
-                         PatientRepository patientRepository){
+                         PatientRepository patientRepository,
+                         BedRepository bedRepository,
+                         NucleicAcidTestSheetRepository nucleicAcidTestSheetRepository)
+    {
         this.doctorRepository = doctorRepository;
         this.headNurseRepository = headNurseRepository;
         this.wardNurseRepository  = wardNurseRepository;
         this.emergencyNurseRepository = emergencyNurseRepository;
         this.patientRepository = patientRepository;
+        this.bedRepository = bedRepository;
+        this.nucleicAcidTestSheetRepository = nucleicAcidTestSheetRepository;
 
     }
 
@@ -139,6 +147,7 @@ public class DoctorService {
      *   200:success,
      *   other:failure
      * }
+     * 出院，死亡从医护关系，病床病人关系中解绑
      */
     public int statusRevise(int patientID,int living_status){
         Long patientId  = new Long(patientID);
@@ -147,6 +156,18 @@ public class DoctorService {
             Patient patient = customerOptional.get();
             patient.setLiving_status(living_status);
             patientRepository.save(patient);
+            if(living_status ==1||living_status==2){//出院/死亡
+                Bed bed = patient.getBed();
+                bed.setPatient(null);
+                bedRepository.save(bed);
+                Ward_nurse ward_nurse = patient.getNurse();
+                ward_nurse.getPatients().remove(patient);
+                wardNurseRepository.save(ward_nurse);
+                patient.setBed(null);
+                patient.setNurse(null);
+                patientRepository.save(patient);
+            }
+
             return 0;
         }
         return -1;
@@ -335,6 +356,28 @@ public class DoctorService {
         }
         returnMap.put("sheetTable",p_set);
         return returnMap;
+
+    }
+
+    public String addAcidTest(AddAcidTestRequest addAcidTestRequest){
+        String username = addAcidTestRequest.getPatientName();
+         int condition_rating = addAcidTestRequest.getCondition_rating();//012,
+        int result = addAcidTestRequest.getResult();//阴性 = 0，阳性 =1,
+         Date date = addAcidTestRequest.getDate();// date类型
+
+        Patient patient = patientRepository.findByName(addAcidTestRequest.getPatientName());
+        if(patient ==null)
+            throw new UsernameNotFoundException(username);
+        Nucleic_acid_test_sheet nucleic_acid_test_sheet = new Nucleic_acid_test_sheet();
+        nucleic_acid_test_sheet.setPatient(patient);
+        nucleic_acid_test_sheet.setResult(result);
+        nucleic_acid_test_sheet.setDate(date);
+        nucleic_acid_test_sheet.setConditional_rating(condition_rating);
+        nucleicAcidTestSheetRepository.save(nucleic_acid_test_sheet);
+        patient.add_Nucleic_acid_test_sheet(nucleic_acid_test_sheet);
+        patientRepository.save(patient);
+        return "success";
+
 
     }
 }

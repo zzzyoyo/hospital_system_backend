@@ -30,11 +30,11 @@ public class Daily_state_records implements Comparable<Daily_state_records>{
 
     public Daily_state_records(double temperature,int nucleic_acid_test_result,int living_status,String  symptom,Patient patient){
         this.patient = null;
-        this.living_status = living_status;
-        this.temperature = temperature;
-        this.nucleic_acid_test_result = nucleic_acid_test_result;
+        this.living_status = living_status;//直接记录patient最新
+        this.temperature = temperature;//nurse
+        this.nucleic_acid_test_result = nucleic_acid_test_result;//直接记录patient最新
         this.date = new Date();
-        this.symptom = symptom;
+        this.symptom = symptom;//nurse
     }
 
     public void setSymptom(String symptom) {

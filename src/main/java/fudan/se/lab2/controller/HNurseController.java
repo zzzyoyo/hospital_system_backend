@@ -1,5 +1,6 @@
 package fudan.se.lab2.controller;
 
+import fudan.se.lab2.controller.request.DoctorSelectRequest;
 import fudan.se.lab2.controller.request.OnlyNameRequest;
 import fudan.se.lab2.controller.request.OperateNurseRequest;
 import fudan.se.lab2.service.HNurseService;
@@ -29,6 +30,17 @@ public class HNurseController {
 
         System.out.println("get a emergencyNurse Request ");
         return ResponseEntity.ok(hNurseService.initialHNurse(onlyNameRequest.getUsername()));    //有参ok 返回HttpStatus状态码和body内容
+
+    }
+    @PostMapping("/select")
+    public ResponseEntity<?>select(@RequestBody DoctorSelectRequest doctorSelectRequest){
+        logger.debug("get a doctor select Request ");
+        System.out.println("get a doctor select Request");
+        //int type, int leave,int trans,int status
+        return ResponseEntity.ok(hNurseService.select(doctorSelectRequest.getArea_type(),
+                doctorSelectRequest.getLeave(),
+                doctorSelectRequest.getTrans(),
+                doctorSelectRequest.getStatus()));    //有参ok 返回HttpStatus状态码和body内容
 
     }
 

@@ -66,8 +66,7 @@ public class ENurseService {
     }
 
     /**
-     *    area_type: int,//轻、重、危重区域分别为0、1、2，-1代表不筛选
-     *   isolated: int,//表示是否在隔离区，0是，1否，2不筛选
+     *    area_type: int,//1 轻症 2 重症 4危重症，0隔离，3治疗
      *   rating: int,//0：轻症 1： 重症 2：危重，3不筛选
      *   status: int//0：住院 1：出院 2：死亡,3不筛选
      * @param area_type
@@ -101,15 +100,10 @@ public class ENurseService {
         }
         if(area_type ==3){
             Set<Patient> allTreatment = new HashSet<>();
-            for(Patient  patient: patientRepository.findByTreatmentArea(1)){
-                allTreatment.add(patient);
-            }
-            for(Patient  patient: patientRepository.findByTreatmentArea(2)){
-                allTreatment.add(patient);
-            }
-            for(Patient  patient: patientRepository.findByTreatmentArea(4)){
-                allTreatment.add(patient);
-            }
+            allTreatment.addAll(patientRepository.findByTreatmentArea(1));
+            allTreatment.addAll(patientRepository.findByTreatmentArea(2));
+            allTreatment.addAll(patientRepository.findByTreatmentArea(4));
+
             return allTreatment;
         }
         //default 返回所有病人

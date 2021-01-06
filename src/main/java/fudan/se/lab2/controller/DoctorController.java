@@ -28,6 +28,15 @@ public class DoctorController{
         return ResponseEntity.ok(doctorService.initialDoctor(onlyNameRequest.getUsername()));    //有参ok 返回HttpStatus状态码和body内容
 
     }
+    @PostMapping("/doctor")
+
+    public ResponseEntity<?>addAcidTest(@RequestBody AddAcidTestRequest addAcidTestRequest){
+        logger.debug("get a addAcidTestRequest ");
+
+        System.out.println("get a addAcidTestRequest");
+        return ResponseEntity.ok(doctorService.addAcidTest(addAcidTestRequest));    //有参ok 返回HttpStatus状态码和body内容
+
+    }
     @PostMapping("/select")
     public ResponseEntity<?>select(@RequestBody DoctorSelectRequest doctorSelectRequest){
         logger.debug("get a doctor select Request ");

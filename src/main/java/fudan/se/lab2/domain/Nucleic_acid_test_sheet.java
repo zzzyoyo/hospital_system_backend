@@ -12,7 +12,7 @@ public class Nucleic_acid_test_sheet implements  Comparable <Nucleic_acid_test_s
     private Long nucleic_acid_test_sheet_Id;
 
     @Column
-    private String result;
+    private int result;//阴性 = 0，阳性 =1
     @Column
     private Date date;
     @Column
@@ -30,7 +30,7 @@ public class Nucleic_acid_test_sheet implements  Comparable <Nucleic_acid_test_s
      * @param conditional_rating
      * @param patient
      */
-    public Nucleic_acid_test_sheet(String result,int conditional_rating,Patient patient){
+    public Nucleic_acid_test_sheet(int result,int conditional_rating,Patient patient){
         this.patient = patient;
         this.result = result;
         this.conditional_rating = conditional_rating;
@@ -50,7 +50,7 @@ public class Nucleic_acid_test_sheet implements  Comparable <Nucleic_acid_test_s
         this.date = date;
     }
 
-    public void setResult(String result) {
+    public void setResult(int result) {
         this.result = result;
     }
 
@@ -74,7 +74,7 @@ public class Nucleic_acid_test_sheet implements  Comparable <Nucleic_acid_test_s
         return nucleic_acid_test_sheet_Id;
     }
 
-    public String getResult() {
+    public int getResult() {
         return result;
     }
 
