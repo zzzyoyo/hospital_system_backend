@@ -28,7 +28,7 @@ public class Treatment_area {
 
 
     @Column(name = "type", unique = true)
-    private int type; //4 轻症 2 重症 1危重症
+    private int type; //1 轻症 2 重症 4危重症 0 隔离
 
 
     @OneToMany(mappedBy = "treatment_area",cascade = CascadeType.MERGE, fetch = FetchType.EAGER)

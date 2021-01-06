@@ -94,10 +94,25 @@ public class ENurseService {
 
     }
     public Iterable<Patient>selectArea(int area_type) {
+        //1 轻症 2 重症 4危重症 0 隔离 3 治疗区域 -1 不筛选
 
         if (area_type == 1 || area_type == 2 || area_type == 4 || area_type == 0) {
             return patientRepository.findByTreatmentArea(area_type);
         }
+        if(area_type ==3){
+            Set<Patient> allTreatment = new HashSet<>();
+            for(Patient  patient: patientRepository.findByTreatmentArea(1)){
+                allTreatment.add(patient);
+            }
+            for(Patient  patient: patientRepository.findByTreatmentArea(2)){
+                allTreatment.add(patient);
+            }
+            for(Patient  patient: patientRepository.findByTreatmentArea(4)){
+                allTreatment.add(patient);
+            }
+            return allTreatment;
+        }
+        //default 返回所有病人
         return patientRepository.findAll();
     }
     public Iterable<Patient> selectRating(Iterable<Patient> areaPatients,int rating){
