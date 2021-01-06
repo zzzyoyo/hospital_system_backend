@@ -178,6 +178,7 @@ public class DoctorService {
                 if(patient.getLiving_status()==status)
                     temp.add(patient);
             }
+            System.out.println("status patient num : "+temp.size());
             return temp;
         }
         return areaPatients;
@@ -197,11 +198,17 @@ public class DoctorService {
             else if(condition ==0||treatment!=1)//病人为轻
                 temp.add(patient);
         }//trans: int 是否待转入其他治疗区域，0是，1否，2都可以
-        if(trans ==0)return temp;
+        if(trans ==0){
+            System.out.println("trans patient num : "+temp.size());
+            return temp;
+        }
+
         else if (trans ==1){//所有 -需要转移
              if(statusPatients.removeAll(temp) ==true)//有修改返回true
+                 System.out.println("trans patient num : "+statusPatients.size());
              return statusPatients;
         }
+        System.out.println("trans patient num : "+statusPatients.size());
         return statusPatients;
 
     }
@@ -209,7 +216,6 @@ public class DoctorService {
         if (leave == 2) return transPatients;
         Set<Patient> canLeave = new HashSet<>();
         for (Patient patient : transPatients) {
-            ;
             List<Daily_state_records> daily_state_recordsList = new ArrayList<Daily_state_records>(patient.getDaily_state_records());
             Collections.sort(daily_state_recordsList);
             List<Nucleic_acid_test_sheet> nucleic_acid_test_sheetList = new ArrayList<Nucleic_acid_test_sheet>(patient.getNucleic_acid_test_sheets());
@@ -225,18 +231,25 @@ public class DoctorService {
                     canLeave.add(patient);
             }
         }
-        if(leave ==0)return canLeave;
+        if(leave ==0){
+            System.out.println("can leave patient num : "+canLeave.size());
+            return canLeave;}
         else if (leave ==1){
             transPatients.removeAll(canLeave);
+            System.out.println("can not leave patient num : "+transPatients.size());
             return transPatients;
         }
+        System.out.println("all patient num : "+transPatients.size());
         return transPatients;
 
     }
 
     public Map<String, Object> select(int type, int leave,int trans,int status){
+        System.out.println("type: "+type+"  leave: "+leave+"  trans: "+trans+"  status: "+status);
         Map<String,Object>returnMap = new HashMap<>();
+        System.out.println("area type "+type);
         Set<Patient> areaPatients = patientRepository.findByTreatmentArea(type);
+        System.out.println("area patient num : "+areaPatients.size());
         Set<Patient>patients =selectLeave(leave,selectTrans(trans,selectStatus(status,areaPatients)));
         Set<Map> p_set = new HashSet<>();
         for(Patient patient:patients){
@@ -287,6 +300,7 @@ public class DoctorService {
                 temp.put("living_status",daily_state_record.getLiving_status());
                 p_set.add(temp);
             }
+            System.out.println("dailyStatusRecord num"+p_set.size());
 
         }
         returnMap.put("recordTable",p_set);
@@ -322,7 +336,7 @@ public class DoctorService {
                 temp.put("condition_rating",nucleic_acid_test_sheet.getConditional_rating());
                  p_set.add(temp);
             }
-
+            System.out.println("nucleic acid test sheets num"+p_set.size());
         }
         returnMap.put("sheetTable",p_set);
         return returnMap;

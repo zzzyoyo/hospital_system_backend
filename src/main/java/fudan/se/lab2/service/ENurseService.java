@@ -155,6 +155,8 @@ public class ENurseService {
         nucleic_acid_test_sheet.setDate(date);
         nucleic_acid_test_sheet.setResult(result);
         nucleicAcidTestSheetRepository.save(nucleic_acid_test_sheet);
+        System.out.println("add nucleicAcidSheet of patient "+patient.getName());
+
         patient.add_Nucleic_acid_test_sheet(nucleic_acid_test_sheet);
 
         Map<String, String> returnMap = new HashMap<>();
@@ -189,7 +191,10 @@ public class ENurseService {
         int bedNum = beds.size();
         int patientNum = patientRepository.findByTreatmentArea(type).size();
         int nurseNum = ward_nurses.size();
+        System.out.println("bed Num: "+bedNum+"  ,patientNum "+patientNum+
+                "   nurseNum * patientNumPerNurse: "+ nurseNum * patientNumPerNurse);
         if(patientNum < bedNum && patientNum < nurseNum * patientNumPerNurse){
+            System.out.println("patient "+patient.getName()+"  do not need to stay in isolated area");
             patient.setTreatmentArea(type);
             for(Bed bed: beds){
                 if(bed.getPatient() == null){
@@ -200,8 +205,10 @@ public class ENurseService {
                 }
             }
             for(Ward_nurse nurse : ward_nurses){
+
                 if(nurse.getPatients().size() < patientNumPerNurse){
                     nurse.addPatients(patient);
+                    System.out.println("nurse "+nurse.getUsername()+" add patient "+patient.getName());
                     patient.setNurse(nurse);
                     wardNurseRepository.save(nurse);
                     break;

@@ -117,6 +117,21 @@ public class Lab2Application {
             Ward_nurse ward_nurse11  = new Ward_nurse("wardNurse11","123456");
             wardNurseRepository.save(ward_nurse11);
         }
+        if(wardNurseRepository.findByUsername("wardNurse12") == null){
+            Ward_nurse ward_nurse12  = new Ward_nurse("wardNurse12","123456");
+            ward_nurse12.setTreatment_area(treatmentAreaRepository.findByType(4));
+            wardNurseRepository.save(ward_nurse12);
+        }
+        if(wardNurseRepository.findByUsername("wardNurse13") == null){
+            Ward_nurse ward_nurse13  = new Ward_nurse("wardNurse13","123456");
+            ward_nurse13.setTreatment_area(treatmentAreaRepository.findByType(4));
+            wardNurseRepository.save(ward_nurse13);
+        }
+        if(wardNurseRepository.findByUsername("wardNurse14") == null){
+            Ward_nurse ward_nurse14  = new Ward_nurse("wardNurse14","123456");
+            ward_nurse14.setTreatment_area(treatmentAreaRepository.findByType(4));
+            wardNurseRepository.save(ward_nurse14);
+        }
     }
     public void init_headNurse(TreatmentAreaRepository treatmentAreaRepository,
                                HeadNurseRepository headNurseRepository){
@@ -282,8 +297,31 @@ public class Lab2Application {
             for(int i = 0;i < 10; i++){
                 Bed bed = new Bed(treatment_area);
                 bedRepository.save(bed);
+                treatment_area.addBeds(bed);
             }
+            treatmentAreaRepository.save(treatment_area);
         }
+        Treatment_area treatment_area2 = treatmentAreaRepository.findByType(2);
+        if(treatment_area2.getBeds().size() == 0){
+            for(int i = 0;i < 10; i++){
+                Bed bed = new Bed(treatment_area2);
+                bedRepository.save(bed);
+                treatment_area2.addBeds(bed);
+            }
+            treatmentAreaRepository.save(treatment_area2);
+        }
+        Treatment_area treatment_area4 = treatmentAreaRepository.findByType(4);
+        if(treatment_area4.getBeds().size() == 0){
+            for(int i = 0;i < 10; i++){
+                Bed bed = new Bed(treatment_area4);
+                bedRepository.save(bed);
+                treatment_area4.addBeds(bed);
+            }
+            treatmentAreaRepository.save(treatment_area4);
+        }
+
+
+
     }
 }
 
