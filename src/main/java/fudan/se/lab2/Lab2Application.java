@@ -107,6 +107,16 @@ public class Lab2Application {
 
         }
 
+        if(wardNurseRepository.findByUsername("wardNurse10") == null){
+            Ward_nurse ward_nurse10  = new Ward_nurse("wardNurse10","123456");
+            ward_nurse10.setTreatment_area(treatmentAreaRepository.findByType(1));
+            wardNurseRepository.save(ward_nurse10);
+        }
+
+        if(wardNurseRepository.findByUsername("wardNurse11") == null){
+            Ward_nurse ward_nurse11  = new Ward_nurse("wardNurse11","123456");
+            wardNurseRepository.save(ward_nurse11);
+        }
     }
     public void init_headNurse(TreatmentAreaRepository treatmentAreaRepository,
                                HeadNurseRepository headNurseRepository){

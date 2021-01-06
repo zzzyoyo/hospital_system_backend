@@ -47,7 +47,7 @@ public class ENurseService {
         this.nucleicAcidTestSheetRepository = nucleicAcidTestSheetRepository;
     }
 
-    public Map<String, Set> intialENurse(String username){
+    public Map<String, Set> initialENurse(String username){
         Map<String ,Set>returnMap = new HashMap<>();
         Iterable<Patient > allPatients = patientRepository.findAll();
         Set<Map> p_set = new HashSet<>();
