@@ -5,7 +5,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "nucleic_acid_test_sheet")
-public class Nucleic_acid_test_sheet {
+public class Nucleic_acid_test_sheet implements  Comparable <Nucleic_acid_test_sheet>{
     @Id
     @Column(name="nucleic_acid_test_sheet_Id")
     @GeneratedValue(strategy = GenerationType.AUTO)//自动生成
@@ -76,5 +76,12 @@ public class Nucleic_acid_test_sheet {
 
     public String getResult() {
         return result;
+    }
+
+    @Override
+    public int compareTo( Nucleic_acid_test_sheet nucleic_acid_test_sheet2 ) {
+
+        if(this.getDate().before(nucleic_acid_test_sheet2.getDate()))return -1;
+        else return 1;
     }
 }

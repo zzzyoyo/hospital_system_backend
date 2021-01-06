@@ -9,6 +9,8 @@ import java.util.Set;
 
 public interface WardNurseRepository extends CrudRepository<Ward_nurse,Long> {
     Ward_nurse findByUsername(String username);
+
     @Query("SELECT n FROM Ward_nurse n")
     Set<Ward_nurse> findAllWardNurses();
+
 }
