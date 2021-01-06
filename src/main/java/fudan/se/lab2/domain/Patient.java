@@ -109,4 +109,12 @@ public class Patient {
     public Set<Nucleic_acid_test_sheet> getNucleic_acid_test_sheets() {
         return nucleic_acid_test_sheets;
     }
+
+    public Ward_nurse getNurse() {
+        return nurse;
+    }
+
+    public void setNurse(Ward_nurse nurse) {
+        this.nurse = nurse;
+    }
 }

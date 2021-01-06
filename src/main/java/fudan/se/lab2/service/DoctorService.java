@@ -75,10 +75,12 @@ public class DoctorService {
             Map<String, Object> temp = new HashMap<>();
             temp.put("name", nurse.getUsername());
 
+            Set<String> patientSet = new HashSet<>();
             for (Patient p : nurse.getPatients()) {
-                temp.put("patient", p.getName());
+                patientSet.add(p.getName());
                 patients.add(p);
             }
+            temp.put("patients", patientSet);
             n_set.add(temp);
         }
         returnMap.put("wardNurse_tableData",n_set);
@@ -118,6 +120,7 @@ public class DoctorService {
         if (customerOptional.isPresent()) {
             Patient patient = customerOptional.get();
             patient.setCondition_rating(condition_rating);
+            patientRepository.save(patient);
             return 0;
         }
         return -1;
@@ -144,6 +147,7 @@ public class DoctorService {
         if (customerOptional.isPresent()) {
             Patient patient = customerOptional.get();
             patient.setLiving_status(living_status);
+            patientRepository.save(patient);
             return 0;
         }
         return -1;
