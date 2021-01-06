@@ -22,11 +22,11 @@ public class ENurseController {
 
     }
     @PostMapping("/emergencyNurse")
-    public ResponseEntity<?>emergencyNurse(@RequestParam String username){
+    public ResponseEntity<?>emergencyNurse(@RequestBody OnlyNameRequest onlyNameRequest){
         logger.debug("get a emergencyNurse Request ");
 
         System.out.println("get a emergencyNurse Request ");
-        return ResponseEntity.ok(eNurseService.intialENurse(username));    //有参ok 返回HttpStatus状态码和body内容
+        return ResponseEntity.ok(eNurseService.intialENurse(onlyNameRequest.getUsername()));    //有参ok 返回HttpStatus状态码和body内容
 
     }
 

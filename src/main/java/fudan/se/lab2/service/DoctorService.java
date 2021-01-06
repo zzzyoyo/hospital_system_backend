@@ -60,13 +60,13 @@ public class DoctorService {
     public Map<String, Object>initialDoctor(String username){
         Map<String,Object>returnMap = new HashMap<>();
         Set<Map> n_set = new HashSet<>();
-        Set<Patient>patients = new HashSet<>();
         Doctor doctor = doctorRepository.findByUsername(username);
         if(doctor ==null){
             throw new UsernameNotFoundException(username);
         }
         Treatment_area treatmentArea = doctor.getTreatment_area();
         int area = treatmentArea.getType();
+        Set<Patient>patients = patientRepository.findByTreatmentArea(area);
         returnMap.put("area",area);
         String headNurse = treatmentArea.getHead_nurse().getUsername();
         returnMap.put("headNurse",headNurse);
@@ -78,7 +78,6 @@ public class DoctorService {
             Set<String> patientSet = new HashSet<>();
             for (Patient p : nurse.getPatients()) {
                 patientSet.add(p.getName());
-                patients.add(p);
             }
             temp.put("patients", patientSet);
             n_set.add(temp);

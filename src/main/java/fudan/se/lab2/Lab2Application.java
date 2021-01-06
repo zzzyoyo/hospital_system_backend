@@ -60,6 +60,7 @@ public class Lab2Application {
                 init_patient(patientRepository, wardNurseRepository);
                 set_wardNurse_patient(wardNurseRepository, patientRepository);
 
+                init_emergencyNurse(emergencyNurseRepository);
 
 
             }
@@ -235,6 +236,19 @@ public class Lab2Application {
         patientSet.add(patient2);
         ward_nurse.setPatients(patientSet);
         wardNurseRepository.save(ward_nurse);
+        patient1.setNurse(ward_nurse);
+        patient1.setTreatmentArea(1);
+        patientRepository.save(patient1);
+        patient2.setNurse(ward_nurse);
+        patient2.setTreatmentArea(1);
+        patientRepository.save(patient2);
+    }
+
+    public void init_emergencyNurse(EmergencyNurseRepository emergencyNurseRepository){
+        if(emergencyNurseRepository.findByUsername("eNurse1")==null){
+            Emergency_nurse emergency_nurse = new Emergency_nurse("eNurse1","123456");
+            emergencyNurseRepository.save(emergency_nurse);
+        }
     }
 }
 

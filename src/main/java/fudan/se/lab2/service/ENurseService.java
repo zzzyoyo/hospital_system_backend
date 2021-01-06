@@ -1,8 +1,10 @@
 package fudan.se.lab2.service;
 
 import fudan.se.lab2.controller.request.AddPatientRequest;
+import fudan.se.lab2.domain.Bed;
 import fudan.se.lab2.domain.Nucleic_acid_test_sheet;
 import fudan.se.lab2.domain.Patient;
+import fudan.se.lab2.domain.Ward_nurse;
 import fudan.se.lab2.exception.UsernameHasBeenRegisteredException;
 import fudan.se.lab2.repository.*;
 import org.slf4j.Logger;
@@ -22,6 +24,8 @@ public class ENurseService {
     private EmergencyNurseRepository emergencyNurseRepository;
     private PatientRepository patientRepository;
     private NucleicAcidTestSheetRepository nucleicAcidTestSheetRepository;
+    private TreatmentAreaRepository treatmentAreaRepository;
+    private BedRepository bedRepository;
     Logger logger = LoggerFactory.getLogger(ENurseService.class);
 
     @Autowired
@@ -30,12 +34,16 @@ public class ENurseService {
                        WardNurseRepository wardNurseRepository,
                        EmergencyNurseRepository emergencyNurseRepository,
                        PatientRepository patientRepository,
-                         NucleicAcidTestSheetRepository nucleicAcidTestSheetRepository){
+                         BedRepository bedRepository,
+                         NucleicAcidTestSheetRepository nucleicAcidTestSheetRepository,
+                         TreatmentAreaRepository treatmentAreaRepository){
         this.doctorRepository = doctorRepository;
         this.headNurseRepository = headNurseRepository;
         this.wardNurseRepository  = wardNurseRepository;
         this.emergencyNurseRepository = emergencyNurseRepository;
         this.patientRepository = patientRepository;
+        this.treatmentAreaRepository = treatmentAreaRepository;
+        this.bedRepository = bedRepository;
         this.nucleicAcidTestSheetRepository = nucleicAcidTestSheetRepository;
     }
 
@@ -49,6 +57,7 @@ public class ENurseService {
             temp.put("username",patient.getName());
             temp.put("condition_rating",patient.getCondition_rating());
             temp.put("living_status",patient.getLiving_status());
+            temp.put("area", patient.getTreatmentArea());
             p_set.add(temp);
         }
         returnMap.put("patient_tableData",p_set);
@@ -114,7 +123,7 @@ public class ENurseService {
         return ratingPatients;
     }
 
-    public String addPatient(AddPatientRequest addPatientRequest) {
+    public Map<String, String> addPatient(AddPatientRequest addPatientRequest) {
         String name = addPatientRequest.getName();
         Date date = addPatientRequest.getDate();
         String result = addPatientRequest.getResult();
@@ -132,11 +141,64 @@ public class ENurseService {
         nucleic_acid_test_sheet.setResult(result);
         nucleicAcidTestSheetRepository.save(nucleic_acid_test_sheet);
         patient.add_Nucleic_acid_test_sheet(nucleic_acid_test_sheet);
+
+        Map<String, String> returnMap = new HashMap<>();
+        int type = 0;
+        int patientNumPerNurse = 0;
+        String description = "";
+        switch (conditional_rating){
+            case 0:{
+                type = 1;
+                description = "轻症区域";
+                patientNumPerNurse = 3;
+                break;
+            }
+            case 1:{
+                type = 2;
+                description = "重症区域";
+                patientNumPerNurse = 2;
+                break;
+            }
+            case 2:{
+                type = 4;
+                description = "危重症区域";
+                patientNumPerNurse = 1;
+                break;
+            }
+            default:{
+                break;
+            }
+        }
+        Set<Bed> beds = treatmentAreaRepository.findByType(type).getBeds();
+        Set<Ward_nurse> ward_nurses = treatmentAreaRepository.findByType(type).getWard_nurses();
+        int bedNum = beds.size();
+        int patientNum = patientRepository.findByTreatmentArea(type).size();
+        int nurseNum = ward_nurses.size();
+        if(patientNum < bedNum && patientNum < nurseNum * patientNumPerNurse){
+            patient.setTreatmentArea(type);
+            for(Bed bed: beds){
+                if(bed.getPatient() == null){
+                    bed.setPatient(patient);
+                    patient.setBed(bed);
+                    bedRepository.save(bed);
+                    break;
+                }
+            }
+            for(Ward_nurse nurse : ward_nurses){
+                if(nurse.getPatients().size() < patientNumPerNurse){
+                    nurse.addPatients(patient);
+                    patient.setNurse(nurse);
+                    wardNurseRepository.save(nurse);
+                    break;
+                }
+            }
+            returnMap.put("area",description);
+        }
+        else {
+            returnMap.put("area","隔离区域");
+        }
         patientRepository.save(patient);
-
-
-
-        return "success";
+        return returnMap;
     }
 
 
