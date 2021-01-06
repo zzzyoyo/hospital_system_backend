@@ -5,7 +5,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "daily_state_records")
-public class Daily_state_records {
+public class Daily_state_records implements Comparable<Daily_state_records>{
     @Id
     @Column(name="daily_state_records_Id")
     @GeneratedValue(strategy = GenerationType.AUTO)//自动生成
@@ -16,7 +16,7 @@ public class Daily_state_records {
     @Column
     private Date date;
     @Column
-    private int nucleic_acid_test_result;//阴性，阳性
+    private int nucleic_acid_test_result;//阴性 = 0，阳性 =1
     @Column
     private int living_status;//0：住院 1：出院 2：死亡
     @Column
@@ -26,7 +26,7 @@ public class Daily_state_records {
     @ManyToOne(cascade=CascadeType.MERGE)
     private Patient patient;
 
-    public Daily_state_records(){}
+    public Daily_state_records (){}
 
     public Daily_state_records(double temperature,int nucleic_acid_test_result,int living_status,String  symptom,Patient patient){
         this.patient = null;
@@ -91,5 +91,12 @@ public class Daily_state_records {
 
     public void setTemperature(double temperature) {
         this.temperature = temperature;
+    }
+
+    @Override
+    public int compareTo(Daily_state_records o) {
+        if(this.getDate().before(o.getDate()))return -1;
+        else return 1;
+
     }
 }

@@ -1,5 +1,6 @@
 package fudan.se.lab2.controller;
 
+import fudan.se.lab2.controller.request.DoctorSelectRequest;
 import fudan.se.lab2.controller.request.OnlyNameRequest;
 import fudan.se.lab2.controller.request.RatingReviseRequest;
 import fudan.se.lab2.controller.request.StatusReviseRequest;
@@ -28,6 +29,18 @@ public class DoctorController{
 
         System.out.println("get a doctor initial Request");
         return ResponseEntity.ok(doctorService.initialDoctor(onlyNameRequest.getUsername()));    //有参ok 返回HttpStatus状态码和body内容
+
+    }
+    @PostMapping("/select")
+    public ResponseEntity<?>select(@RequestBody DoctorSelectRequest doctorSelectRequest){
+        logger.debug("get a doctor select Request ");
+
+        System.out.println("get a doctor select Request");
+        //int type, int leave,int trans,int status
+        return ResponseEntity.ok(doctorService.select(doctorSelectRequest.getType(),
+                doctorSelectRequest.getLeave(),
+                doctorSelectRequest.getTrans(),
+                doctorSelectRequest.getStatus()));    //有参ok 返回HttpStatus状态码和body内容
 
     }
     @PostMapping("/ratingRevise")

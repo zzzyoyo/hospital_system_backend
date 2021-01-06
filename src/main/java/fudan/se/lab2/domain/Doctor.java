@@ -37,25 +37,7 @@ public class Doctor implements Medical_personnel {
         return identity;
     }
 
-    /*@Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
 
-        List<GrantedAuthority> authList = new ArrayList<GrantedAuthority>();
-        //主治医生可以查看当前治疗区域的病人信息并支持不同条件的筛选（例如
-        //根据是否满足出院条件、是否待转入其他治疗区域、病人生命状态等）
-        authList.add(new SimpleGrantedAuthority("Check_All_Patient_Status"));
-        //可以查看当前治疗区域的护士长及病房护士信息，以及病房护士负责的病人；
-        authList.add(new SimpleGrantedAuthority("Check_HeadNurse_Status"));
-        authList.add(new SimpleGrantedAuthority("Check_Nurses_Status"));
-        //可以修改病人的病情评级； 可以修改病人的生命状态；
-        authList.add(new SimpleGrantedAuthority("Modify_Patient_Status"));
-
-        // 可以为病人进行核酸检测（添加新的检测单）；
-        authList.add(new SimpleGrantedAuthority("Add_test_sheet"));
-        // 轻症治疗区域的主治医生可以根据病人情况决定病人是否可以康复出院。
-        return authList;
-
-    }*/
     public String getPassword() {
         return password;
     }
