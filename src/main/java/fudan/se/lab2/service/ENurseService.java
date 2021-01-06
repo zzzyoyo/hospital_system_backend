@@ -212,7 +212,6 @@ public class ENurseService {
         else {
             returnMap.put("area","隔离区域");
         }
-        patientRepository.save(patient);
         return returnMap;
     }
 

@@ -11,10 +11,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import sun.java2d.pipe.AAShapePipe;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.beans.beancontext.BeanContext;
+import java.util.*;
 
 /**
  * Welcome to 2020 Software Engineering Lab2.
@@ -42,7 +40,8 @@ public class Lab2Application {
                                         WardNurseRepository wardNurseRepository,
                                         EmergencyNurseRepository emergencyNurseRepository,
                                         PasswordEncoder passwordEncoder,
-                                        PatientRepository patientRepository
+                                        PatientRepository patientRepository,
+                                        BedRepository bedRepository
                                         ) {
         return new CommandLineRunner() {
             @Override
@@ -58,11 +57,11 @@ public class Lab2Application {
                 set_treatmentArea(treatmentAreaRepository, doctorRepository, headNurseRepository);
 
                 init_patient(patientRepository, wardNurseRepository);
-                set_wardNurse_patient(wardNurseRepository, patientRepository);
 
                 init_emergencyNurse(emergencyNurseRepository);
+                init_bed(bedRepository, treatmentAreaRepository);
 
-
+                set_wardNurse_patient_bed(treatmentAreaRepository,wardNurseRepository, patientRepository,bedRepository);
             }
         };
     }
@@ -227,20 +226,36 @@ public class Lab2Application {
      * @param wardNurseRepository
      * @param patientRepository
      */
-    public void set_wardNurse_patient(WardNurseRepository wardNurseRepository, PatientRepository patientRepository){
+    public void set_wardNurse_patient_bed(TreatmentAreaRepository treatmentAreaRepository, WardNurseRepository wardNurseRepository,
+                                          PatientRepository patientRepository, BedRepository bedRepository){
         Ward_nurse ward_nurse = wardNurseRepository.findByUsername("wardNurse1");
         Set<Patient> patientSet = new HashSet<>();
+        Treatment_area treatment_area = treatmentAreaRepository.findByType(1);
+        Set<Bed> beds = treatment_area.getBeds();
         Patient patient1 = patientRepository.findByName("patient1");
         Patient patient2 = patientRepository.findByName("patient2");
+        //nurse--patient
         patientSet.add(patient1);
         patientSet.add(patient2);
         ward_nurse.setPatients(patientSet);
-        wardNurseRepository.save(ward_nurse);
         patient1.setNurse(ward_nurse);
         patient1.setTreatmentArea(1);
-        patientRepository.save(patient1);
         patient2.setNurse(ward_nurse);
         patient2.setTreatmentArea(1);
+
+        //bed--patient
+        Iterator<Bed> bedIterable = beds.iterator();
+        Bed bed1 = bedIterable.next();
+        bed1.setPatient(patient1);
+        patient1.setBed(bed1);
+        bedRepository.save(bed1);
+        Bed bed2 = bedIterable.next();
+        bed2.setPatient(patient2);
+        patient2.setBed(bed2);
+        bedRepository.save(bed2);
+
+        //save
+        patientRepository.save(patient1);
         patientRepository.save(patient2);
     }
 
@@ -248,6 +263,16 @@ public class Lab2Application {
         if(emergencyNurseRepository.findByUsername("eNurse1")==null){
             Emergency_nurse emergency_nurse = new Emergency_nurse("eNurse1","123456");
             emergencyNurseRepository.save(emergency_nurse);
+        }
+    }
+
+    public void init_bed(BedRepository bedRepository, TreatmentAreaRepository treatmentAreaRepository){
+        Treatment_area treatment_area = treatmentAreaRepository.findByType(1);
+        if(treatment_area.getBeds().size() == 0){
+            for(int i = 0;i < 10; i++){
+                Bed bed = new Bed(treatment_area);
+                bedRepository.save(bed);
+            }
         }
     }
 }
