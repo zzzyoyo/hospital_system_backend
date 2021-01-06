@@ -28,8 +28,7 @@ public class DoctorController{
         return ResponseEntity.ok(doctorService.initialDoctor(onlyNameRequest.getUsername()));    //有参ok 返回HttpStatus状态码和body内容
 
     }
-    @PostMapping("/doctor")
-
+    @PostMapping("/addAcidTest")
     public ResponseEntity<?>addAcidTest(@RequestBody AddAcidTestRequest addAcidTestRequest){
         logger.debug("get a addAcidTestRequest ");
 
@@ -49,7 +48,6 @@ public class DoctorController{
 
     }
     @PostMapping("/ratingRevise")
-//    public ResponseEntity<?>ratingRevise(@RequestParam(name = "patientID")  int patientID,@RequestParam(name ="condition_rating") int condition_rating){
     public ResponseEntity<?>ratingRevise(@RequestBody RatingReviseRequest ratingReviseRequest){
         logger.debug("get a ratingRevise Request ");
 
@@ -60,8 +58,7 @@ public class DoctorController{
 
     }
     @PostMapping("/statusRevise")
-//    public ResponseEntity<?>statusRevise(@RequestParam(name = "patientID")  int patientID,@RequestParam(name ="statusRevise") int statusRevise){
-    public ResponseEntity<?>statusRevise(@RequestBody StatusReviseRequest statusReviseRequest){
+ public ResponseEntity<?>statusRevise(@RequestBody StatusReviseRequest statusReviseRequest){
         logger.debug("get a statusRevise Request ");
 
         System.out.println("get a ratingRevise Request ");

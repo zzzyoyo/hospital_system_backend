@@ -6,11 +6,11 @@ import java.util.Date;
 public class AddPatientRequest {
     private String name;
     private int condition_rating;//0：轻症 1： 重症 2：危重症
-    private String result;
+    private int result;
     private Date date;
 
     public AddPatientRequest(){}
-    public AddPatientRequest(String name,int condition_rating,String result,Date date){
+    public AddPatientRequest(String name,int condition_rating,int result,Date date){
         this.result = result;
         this.name = name;
         this.condition_rating = condition_rating;
@@ -21,7 +21,7 @@ public class AddPatientRequest {
         return date;
     }
 
-    public String getResult() {
+    public int getResult() {
         return result;
     }
 

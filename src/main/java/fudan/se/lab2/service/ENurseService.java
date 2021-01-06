@@ -135,7 +135,7 @@ public class ENurseService {
     public Map<String, String> addPatient(AddPatientRequest addPatientRequest) {
         String name = addPatientRequest.getName();
         Date date = addPatientRequest.getDate();
-        String result = addPatientRequest.getResult();
+        int result = addPatientRequest.getResult();
         int conditional_rating = addPatientRequest.getCondition_rating();
         if (patientRepository.findByName(name) != null) {
             throw new UsernameHasBeenRegisteredException(name);

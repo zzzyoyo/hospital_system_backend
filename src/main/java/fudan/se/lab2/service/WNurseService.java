@@ -1,5 +1,6 @@
 package fudan.se.lab2.service;
 
+import fudan.se.lab2.controller.request.AddDailyRecordRequest;
 import fudan.se.lab2.domain.*;
 import fudan.se.lab2.exception.UsernameNotFoundException;
 import fudan.se.lab2.repository.*;
@@ -17,18 +18,21 @@ public class WNurseService {
     private WardNurseRepository wardNurseRepository;
     private EmergencyNurseRepository emergencyNurseRepository;
     private PatientRepository patientRepository;
+    private DailyRecordRepository dailyRecordRepository;
     Logger logger = LoggerFactory.getLogger(AuthService.class);
 
     public WNurseService(DoctorRepository doctorRepository,
                          HeadNurseRepository headNurseRepository,
                          WardNurseRepository wardNurseRepository,
                          EmergencyNurseRepository emergencyNurseRepository,
-                         PatientRepository patientRepository){
+                         PatientRepository patientRepository,
+                         DailyRecordRepository dailyRecordRepository){
         this.doctorRepository = doctorRepository;
         this.headNurseRepository = headNurseRepository;
         this.wardNurseRepository  = wardNurseRepository;
         this.emergencyNurseRepository = emergencyNurseRepository;
         this.patientRepository = patientRepository;
+        this.dailyRecordRepository = dailyRecordRepository;
 
     }
 
@@ -161,6 +165,31 @@ public class WNurseService {
 
     }
 
+    public String addDailyRecord(AddDailyRecordRequest addDailyRecordRequest){
+        String username = addDailyRecordRequest.getPatientName();
+        float temp = addDailyRecordRequest.getTemperature();
+        Date date = addDailyRecordRequest.getDate();
+        String symptom = addDailyRecordRequest.getSymptom();
 
+        Patient patient = patientRepository.findByName(username);
+        if(patient ==null)
+            throw new UsernameNotFoundException(username);
+        Set<Nucleic_acid_test_sheet>nucleic_acid_test_sheets = patient.getNucleic_acid_test_sheets();
+        int size = nucleic_acid_test_sheets.size();
+        ArrayList<Nucleic_acid_test_sheet> list = new ArrayList<>(nucleic_acid_test_sheets);
+        Collections.sort(list);
+        int result = list.get(size-1).getResult();
+        Daily_state_records daily_state_records = new Daily_state_records();
+        daily_state_records.setPatient(patient);
+        daily_state_records.setTemperature( temp);
+        daily_state_records.setDate(date);
+        daily_state_records.setLiving_status(patient.getLiving_status());
+
+        daily_state_records.setNucleic_acid_test_result(result);
+        dailyRecordRepository.save(daily_state_records);
+        patient.add_Daily_state_records(daily_state_records);
+        patientRepository.save(patient);
+        return "success";
+    }
 
 }

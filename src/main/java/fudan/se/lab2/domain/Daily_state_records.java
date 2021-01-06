@@ -12,7 +12,7 @@ public class Daily_state_records implements Comparable<Daily_state_records>{
     private Long daily_state_records_Id;
 
     @Column
-    private double temperature;
+    private float temperature;
     @Column
     private Date date;
     @Column
@@ -28,7 +28,7 @@ public class Daily_state_records implements Comparable<Daily_state_records>{
 
     public Daily_state_records (){}
 
-    public Daily_state_records(double temperature,int nucleic_acid_test_result,int living_status,String  symptom,Patient patient){
+    public Daily_state_records(float temperature,int nucleic_acid_test_result,int living_status,String  symptom,Patient patient){
         this.patient = null;
         this.living_status = living_status;//直接记录patient最新
         this.temperature = temperature;//nurse
@@ -53,7 +53,7 @@ public class Daily_state_records implements Comparable<Daily_state_records>{
         return patient;
     }
 
-    public double getTemperature() {
+    public float getTemperature() {
         return temperature;
     }
 
@@ -89,7 +89,7 @@ public class Daily_state_records implements Comparable<Daily_state_records>{
         this.nucleic_acid_test_result = nucleic_acid_test_result;
     }
 
-    public void setTemperature(double temperature) {
+    public void setTemperature(float temperature) {
         this.temperature = temperature;
     }
 

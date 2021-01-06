@@ -1,5 +1,6 @@
 package fudan.se.lab2.controller;
 
+import fudan.se.lab2.controller.request.AddDailyRecordRequest;
 import fudan.se.lab2.controller.request.OnlyNameRequest;
 import fudan.se.lab2.controller.request.WardNurseSelectRequest;
 import fudan.se.lab2.service.WNurseService;
@@ -28,6 +29,15 @@ public class WNurseController {
         System.out.println("get a ward nurse initial Request");
         return ResponseEntity.ok(wNurseService.initialWardNurse(username));
     }
+    @PostMapping("/addDailyRecord")
+    public ResponseEntity<?> addDailyRecord(@RequestBody AddDailyRecordRequest addDailyRecordRequest){
+        logger.debug("get a ward nurse addDailyRecord Request ");
+
+
+        System.out.println("get a ward nurse addDailyRecord Request");
+        return ResponseEntity.ok(wNurseService.addDailyRecord(addDailyRecordRequest));
+    }
+
     @PostMapping("/selectFromMyPatient")
     public ResponseEntity<?> selectFromMyPatient(@RequestBody WardNurseSelectRequest wardNurseSelectRequest){
         logger.debug("get a ward nurse initial Request ");

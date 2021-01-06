@@ -32,6 +32,7 @@ public class HNurseController {
         return ResponseEntity.ok(hNurseService.initialHNurse(onlyNameRequest.getUsername()));    //有参ok 返回HttpStatus状态码和body内容
 
     }
+    /*
     @PostMapping("/select")
     public ResponseEntity<?>select(@RequestBody DoctorSelectRequest doctorSelectRequest){
         logger.debug("get a doctor select Request ");
@@ -43,7 +44,7 @@ public class HNurseController {
                 doctorSelectRequest.getStatus()));    //有参ok 返回HttpStatus状态码和body内容
 
     }
-
+*/
     @PostMapping("/deleteNurse")
     public ResponseEntity<?> deleteNurse(@RequestBody OperateNurseRequest operateNurseRequest){
         logger.debug("get a deleteNurse Request ");
