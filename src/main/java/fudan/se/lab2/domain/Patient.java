@@ -28,10 +28,10 @@ public class Patient {
     @OneToOne
     private Bed bed;
 
-    @OneToMany(cascade=CascadeType.MERGE)
+    @OneToMany(cascade=CascadeType.MERGE,fetch=FetchType.EAGER)
     private Set<Nucleic_acid_test_sheet> nucleic_acid_test_sheets = new HashSet<>();
 
-    @OneToMany(cascade =  CascadeType.MERGE)
+    @OneToMany(cascade =  CascadeType.MERGE,fetch=FetchType.EAGER)
     private Set<Daily_state_records> daily_state_records = new HashSet<>();
 
     @ManyToOne

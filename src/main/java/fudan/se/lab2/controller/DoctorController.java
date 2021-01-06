@@ -1,9 +1,6 @@
 package fudan.se.lab2.controller;
 
-import fudan.se.lab2.controller.request.DoctorSelectRequest;
-import fudan.se.lab2.controller.request.OnlyNameRequest;
-import fudan.se.lab2.controller.request.RatingReviseRequest;
-import fudan.se.lab2.controller.request.StatusReviseRequest;
+import fudan.se.lab2.controller.request.*;
 import fudan.se.lab2.service.DoctorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,23 +64,23 @@ public class DoctorController{
     }
 
     @PostMapping("/dailyStatusRecord")
-    public ResponseEntity<?>dailyStatusRecord(@RequestParam(name = "patientID")  int patientID){
+    public ResponseEntity<?>dailyStatusRecord(@RequestBody OnlyIDRequest onlyIDRequest){
         logger.debug("get a dailyStatusRecord Request ");
 
         System.out.println("get a dailyStatusRecord Request ");
 
 
-        return ResponseEntity.ok(doctorService.dailyStatusRecord(patientID));    //有参ok 返回HttpStatus状态码和body内容
+        return ResponseEntity.ok(doctorService.dailyStatusRecord(onlyIDRequest.getPatientID()));    //有参ok 返回HttpStatus状态码和body内容
 
     }
     @PostMapping("/nucleicAcidTestSheet")
-    public ResponseEntity<?>nucleicAcidTestSheet(@RequestParam(name = "patientID")  int patientID){
+    public ResponseEntity<?>nucleicAcidTestSheet(@RequestBody OnlyIDRequest onlyIDRequest){
         logger.debug("get a nucleicAcidTestSheet Request ");
 
         System.out.println("get a nucleicAcidTestSheet Request ");
 
 
-        return ResponseEntity.ok(doctorService.nucleicAcidTestSheet(patientID));    //有参ok 返回HttpStatus状态码和body内容
+        return ResponseEntity.ok(doctorService.nucleicAcidTestSheet(onlyIDRequest.getPatientID()));    //有参ok 返回HttpStatus状态码和body内容
 
     }
 
