@@ -12,7 +12,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import sun.java2d.pipe.AAShapePipe;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Welcome to 2020 Software Engineering Lab2.
@@ -39,7 +41,8 @@ public class Lab2Application {
                                         HeadNurseRepository headNurseRepository,
                                         WardNurseRepository wardNurseRepository,
                                         EmergencyNurseRepository emergencyNurseRepository,
-                                        PasswordEncoder passwordEncoder
+                                        PasswordEncoder passwordEncoder,
+                                        PatientRepository patientRepository
                                         ) {
         return new CommandLineRunner() {
             @Override
@@ -52,9 +55,10 @@ public class Lab2Application {
                 init_doctor(treatmentAreaRepository,doctorRepository);
                 init_headNurse(treatmentAreaRepository,headNurseRepository);
                 init_wardNurse(treatmentAreaRepository,wardNurseRepository);
+                set_treatmentArea(treatmentAreaRepository, doctorRepository, headNurseRepository);
 
-
-
+                init_patient(patientRepository, wardNurseRepository);
+                set_wardNurse_patient(wardNurseRepository, patientRepository);
 
 
 
@@ -174,6 +178,64 @@ public class Lab2Application {
 
     }
 
+    public void set_treatmentArea(TreatmentAreaRepository treatmentAreaRepository,DoctorRepository doctorRepository,
+                                  HeadNurseRepository headNurseRepository){
+        if(treatmentAreaRepository.findByType(1) != null){
+            Doctor doctor1 = doctorRepository.findByUsername("doctor1");
+            Head_nurse head_nurse1 = headNurseRepository.findByUsername("headNurse1");
+            Treatment_area treatment_area1 = treatmentAreaRepository.findByType(1);
+            treatment_area1.setDoctor(doctor1);
+            treatment_area1.setHead_nurse(head_nurse1);
+            treatmentAreaRepository.save(treatment_area1);
+        }
+        if(treatmentAreaRepository.findByType(2) !=null){
+            Doctor doctor2 = doctorRepository.findByUsername("doctor2");
+            Head_nurse head_nurse2 = headNurseRepository.findByUsername("headNurse2");
+            Treatment_area treatment_area2 = treatmentAreaRepository.findByType(2);
+            treatment_area2.setDoctor(doctor2);
+            treatment_area2.setHead_nurse(head_nurse2);
+            treatmentAreaRepository.save(treatment_area2);
+        }
+        if(treatmentAreaRepository.findByType(4) !=null){
+            Doctor doctor4 = doctorRepository.findByUsername("doctor4");
+            Head_nurse head_nurse4 = headNurseRepository.findByUsername("headNurse4");
+            Treatment_area treatment_area4 = treatmentAreaRepository.findByType(4);
+            treatment_area4.setDoctor(doctor4);
+            treatment_area4.setHead_nurse(head_nurse4);
+            treatmentAreaRepository.save(treatment_area4);
+        }
+    }
+
+    public void init_patient(PatientRepository patientRepository, WardNurseRepository wardNurseRepository){
+        Ward_nurse ward_nurse = wardNurseRepository.findByUsername("wardNurse1");
+        if(patientRepository.findByName("patient1")==null){
+            Patient patient1 = new Patient("patient1", 0,0);
+            patient1.setNurse(ward_nurse);
+            patientRepository.save(patient1);
+        }
+        if(patientRepository.findByName("patient2") == null){
+            Patient patient2 = new Patient("patient2", 0,0);
+            patient2.setNurse(ward_nurse);
+            patientRepository.save(patient2);
+        }
+
+    }
+
+    /**
+     * set the patient1 and 2 be wardNurse1's patients
+     * @param wardNurseRepository
+     * @param patientRepository
+     */
+    public void set_wardNurse_patient(WardNurseRepository wardNurseRepository, PatientRepository patientRepository){
+        Ward_nurse ward_nurse = wardNurseRepository.findByUsername("wardNurse1");
+        Set<Patient> patientSet = new HashSet<>();
+        Patient patient1 = patientRepository.findByName("patient1");
+        Patient patient2 = patientRepository.findByName("patient2");
+        patientSet.add(patient1);
+        patientSet.add(patient2);
+        ward_nurse.setPatients(patientSet);
+        wardNurseRepository.save(ward_nurse);
+    }
 }
 
 

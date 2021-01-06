@@ -32,7 +32,7 @@ public class Ward_nurse  implements  Medical_personnel{
     @Column
     private int identity =2;//2 ward_nurse
 
-    @OneToMany(cascade =  CascadeType.MERGE)
+    @OneToMany(cascade =  CascadeType.MERGE,fetch=FetchType.EAGER)
     private Set<Patient> patients = new HashSet<>();
 
     public Ward_nurse(String name,String password){
