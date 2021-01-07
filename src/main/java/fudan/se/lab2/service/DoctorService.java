@@ -180,7 +180,10 @@ public class DoctorService {
         if(patientNum < bedNum && patientNum < nurseNum * patientNumPerNurse) {
 
             System.out.println("patient " + patient.getName() + "  do not need to stay in present area");
-           patient.setNewPatient(1);//newPatient
+            Bed oldBed = patient.getBed();
+            oldBed.setPatient(null);
+            bedRepository.save(oldBed);
+            patient.setNewPatient(1);//newPatient
             patient.setTreatmentArea(type);
             patient.setBed(null);
             for (Bed bed : beds) {

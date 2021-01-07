@@ -114,6 +114,7 @@ public class Lab2Application {
         }
 
         if(wardNurseRepository.findByUsername("wardNurse11") == null){
+            //空闲的护士
             Ward_nurse ward_nurse11  = new Ward_nurse("wardNurse11","123456");
             wardNurseRepository.save(ward_nurse11);
         }
