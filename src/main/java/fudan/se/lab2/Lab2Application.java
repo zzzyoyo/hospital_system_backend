@@ -41,7 +41,8 @@ public class Lab2Application {
                                         EmergencyNurseRepository emergencyNurseRepository,
                                         PasswordEncoder passwordEncoder,
                                         PatientRepository patientRepository,
-                                        BedRepository bedRepository
+                                        BedRepository bedRepository,
+                                        NucleicAcidTestSheetRepository nucleicAcidTestSheetRepository
                                         ) {
         return new CommandLineRunner() {
             @Override
@@ -57,10 +58,9 @@ public class Lab2Application {
                 set_treatmentArea(treatmentAreaRepository, doctorRepository, headNurseRepository);
 
                 init_patient(patientRepository, wardNurseRepository);
-
                 init_emergencyNurse(emergencyNurseRepository);
                 init_bed(bedRepository, treatmentAreaRepository);
-
+                set_nucleic_test(nucleicAcidTestSheetRepository, patientRepository);
                 set_wardNurse_patient_bed(treatmentAreaRepository,wardNurseRepository, patientRepository,bedRepository);
             }
         };
@@ -323,7 +323,16 @@ public class Lab2Application {
 
     }
     public void set_nucleic_test(NucleicAcidTestSheetRepository nucleicAcidTestSheetRepository, PatientRepository patientRepository){
-
+        Patient patient1 = patientRepository.findByName("patient1");
+        Nucleic_acid_test_sheet nucleic_acid_test_sheet1 = new Nucleic_acid_test_sheet(0,0,patient1);
+        nucleicAcidTestSheetRepository.save(nucleic_acid_test_sheet1);
+        patient1.add_Nucleic_acid_test_sheet(nucleic_acid_test_sheet1);
+        patientRepository.save(patient1);
+        Patient patient2 = patientRepository.findByName("patient2");
+        Nucleic_acid_test_sheet nucleic_acid_test_sheet2 = new Nucleic_acid_test_sheet(0,0,patient2);
+        nucleicAcidTestSheetRepository.save(nucleic_acid_test_sheet2);
+        patient2.add_Nucleic_acid_test_sheet(nucleic_acid_test_sheet2);
+        patientRepository.save(patient2);
     }
 }
 

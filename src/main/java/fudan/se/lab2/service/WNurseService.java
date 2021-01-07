@@ -184,6 +184,7 @@ public class WNurseService {
         daily_state_records.setTemperature( temp);
         daily_state_records.setDate(date);
         daily_state_records.setLiving_status(patient.getLiving_status());
+        daily_state_records.setSymptom(symptom);
 
         daily_state_records.setNucleic_acid_test_result(result);
         dailyRecordRepository.save(daily_state_records);
