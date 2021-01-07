@@ -320,7 +320,8 @@ public class Lab2Application {
             treatmentAreaRepository.save(treatment_area4);
         }
 
-
+    }
+    public void set_nucleic_test(NucleicAcidTestSheetRepository nucleicAcidTestSheetRepository, PatientRepository patientRepository){
 
     }
 }
