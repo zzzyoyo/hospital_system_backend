@@ -267,7 +267,7 @@ public class Lab2Application {
         patient1.setTreatmentArea(1);
         patient2.setNurse(ward_nurse);
         patient2.setTreatmentArea(1);
-
+        wardNurseRepository.save(ward_nurse);
         //bed--patient
         Iterator<Bed> bedIterable = beds.iterator();
         Bed bed1 = bedIterable.next();

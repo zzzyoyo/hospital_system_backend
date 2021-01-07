@@ -191,13 +191,16 @@ public class DoctorService {
                     break;
                 }
             }
+            Ward_nurse oldNurse = patient.getNurse();
+            oldNurse.getPatients().remove(patient);
             patient.setNurse(null);
+            wardNurseRepository.save(oldNurse);
             for (Ward_nurse nurse : ward_nurses) {
                 if (nurse.getPatients().size() < patientNumPerNurse) {
                     nurse.addPatients(patient);
+                    wardNurseRepository.save(nurse);
                     System.out.println("nurse " + nurse.getUsername() + " add patient " + patient.getName());
                     patient.setNurse(nurse);
-                    wardNurseRepository.save(nurse);
                     break;
                 }
             }
