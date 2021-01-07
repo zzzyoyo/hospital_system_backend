@@ -19,6 +19,7 @@ public class DoctorService {
     private HeadNurseRepository headNurseRepository;
     private WardNurseRepository wardNurseRepository;
     private EmergencyNurseRepository emergencyNurseRepository;
+    private TreatmentAreaRepository treatmentAreaRepository;
     private PatientRepository patientRepository;
     private BedRepository bedRepository;
     private NucleicAcidTestSheetRepository nucleicAcidTestSheetRepository;
@@ -31,7 +32,8 @@ public class DoctorService {
                          EmergencyNurseRepository emergencyNurseRepository,
                          PatientRepository patientRepository,
                          BedRepository bedRepository,
-                         NucleicAcidTestSheetRepository nucleicAcidTestSheetRepository)
+                         NucleicAcidTestSheetRepository nucleicAcidTestSheetRepository,
+                         TreatmentAreaRepository treatmentAreaRepository)
     {
         this.doctorRepository = doctorRepository;
         this.headNurseRepository = headNurseRepository;
@@ -40,10 +42,13 @@ public class DoctorService {
         this.patientRepository = patientRepository;
         this.bedRepository = bedRepository;
         this.nucleicAcidTestSheetRepository = nucleicAcidTestSheetRepository;
+        this.treatmentAreaRepository = treatmentAreaRepository;
 
     }
 
+
     /**
+     * anyCanLeave：//0：没有可以出院的 1：有可以出院的
      *  area：int//医生负责的病区id号，
      *   headNurse：string//该病区的护士长的username
      *   wardNurse_tableData：[object]//病区的病房护士以及她们负责的病人，都返回名字，不用id，比如
@@ -74,7 +79,12 @@ public class DoctorService {
         }
         Treatment_area treatmentArea = doctor.getTreatment_area();
         int area = treatmentArea.getType();
+        int anyCanLeave = 0;
         Set<Patient>patients = patientRepository.findByTreatmentArea(area);
+        if(selectLeave(0,patients).size()>0){
+            anyCanLeave =1;
+        };
+        returnMap.put("anyCanLeave",anyCanLeave);
         returnMap.put("area",area);
         String headNurse = treatmentArea.getHead_nurse().getUsername();
         returnMap.put("headNurse",headNurse);
@@ -93,6 +103,7 @@ public class DoctorService {
         returnMap.put("wardNurse_tableData",n_set);
         Set<Map> p_set = new HashSet<>();
         for(Patient patient:patients){
+
             Map<String , Object>temp = new HashMap<>();
             temp.put("patientID",patient.getId());
             temp.put("username",patient.getName());
@@ -121,17 +132,123 @@ public class DoctorService {
      *   other:failure
      * }
      */
-    public int ratingRevise(int patientID,int condition_rating){
+    public int movingPresentPatient(Long patientId,int conditional_rating){
+        Optional<Patient> customerOptional= patientRepository.findById(patientId);
+        Patient patient =null;
+        if (customerOptional.isPresent()) {
+            patient = customerOptional.get();}
+
+        assert patient !=null;
+        patient.setCondition_rating(conditional_rating);
+        patientRepository.save(patient);//无论怎样评级都是要改的
+
+        int type = 0;
+        int patientNumPerNurse = 0;
+        String description = "";
+        switch (conditional_rating){
+            case 0:{
+                type = 1;
+                description = "轻症区域";
+                patientNumPerNurse = 3;
+                break;
+            }
+            case 1:{
+                type = 2;
+                description = "重症区域";
+                patientNumPerNurse = 2;
+                break;
+            }
+            case 2:{
+                type = 4;
+                description = "危重症区域";
+                patientNumPerNurse = 1;
+                break;
+            }
+            default:{
+                break;
+            }
+        }
+        Set<Bed> beds = treatmentAreaRepository.findByType(type).getBeds();
+        Set<Ward_nurse> ward_nurses = treatmentAreaRepository.findByType(type).getWard_nurses();
+        int bedNum = beds.size();
+        int patientNum = patientRepository.findByTreatmentArea(type).size();
+        int nurseNum = ward_nurses.size();
+        System.out.println("bed Num: "+bedNum+"  ,patientNum "+patientNum+
+                "   nurseNum * patientNumPerNurse: "+ nurseNum * patientNumPerNurse);
+        if(patientNum < bedNum && patientNum < nurseNum * patientNumPerNurse) {
+
+            System.out.println("patient " + patient.getName() + "  do not need to stay in present area");
+           patient.setNewPatient(1);//newPatient
+            patient.setTreatmentArea(type);
+            patient.setBed(null);
+            for (Bed bed : beds) {
+                if (bed.getPatient() == null) {
+                    bed.setPatient(patient);
+                    patient.setBed(bed);
+                    bedRepository.save(bed);
+                    break;
+                }
+            }
+            patient.setNurse(null);
+            for (Ward_nurse nurse : ward_nurses) {
+                if (nurse.getPatients().size() < patientNumPerNurse) {
+                    nurse.addPatients(patient);
+                    System.out.println("nurse " + nurse.getUsername() + " add patient " + patient.getName());
+                    patient.setNurse(nurse);
+                    wardNurseRepository.save(nurse);
+                    break;
+                }
+            }
+            patientRepository.save(patient);
+            return type;//移动病人成功
+        }
+        return -1;//移动病人失败
+
+    }
+
+    public Map<String,Integer> ratingRevise(int patientID,int condition_rating){
         Long patientId  = new Long(patientID);
+        Map<String,Integer> returnMap = new HashMap<>();
         Optional<Patient> customerOptional= patientRepository.findById(patientId);
         if (customerOptional.isPresent()) {
             Patient patient = customerOptional.get();
-            patient.setCondition_rating(condition_rating);
-            patientRepository.save(patient);
-            return 0;
+            int old_condition_rating  = patient.getCondition_rating();
+            int old_area = patient.getTreatmentArea();
+            int accType = movingPresentPatient(patientId,condition_rating);
+            if( accType!= -1){//当前病区移动成功
+                int isolateFlag = 0;
+                Set<Patient> waitingPatient = patientRepository.findByTreatmentArea(0);
+                if(!waitingPatient.isEmpty()){//隔离区有病人等待
+                    for(Patient patient1:waitingPatient ){
+                        if(patient1.getCondition_rating()==old_condition_rating){
+                            movingPresentPatient(patient1.getId(),condition_rating);
+                            isolateFlag = 1;
+                            break;
+                        }
+                    }
+
+                }
+                if(isolateFlag ==0){//隔离区没有病人
+                    Iterable<Patient>wrongPatient = patientRepository.findAll();
+                    for(Patient patient1:wrongPatient){
+                        if(patient1.getCondition_rating() ==old_condition_rating&&patient1.getTreatmentArea()!=old_area){
+                            movingPresentPatient(patient1.getId(),old_condition_rating);
+                            break;
+                        }
+                    }
+
+                }
+                returnMap.put("transSuccess",1);
+                return returnMap;//至少有一个病人移动
+            }
+
         }
-        return -1;
+        //失败或者没有病人移动
+        returnMap.put("transSuccess",0);
+        return returnMap;
     }
+
+
     /**
      *修改病人的生命状态
      * 权限：doctor
@@ -212,7 +329,7 @@ public class DoctorService {
         for(Patient patient:statusPatients){
             int condition = patient.getCondition_rating();
             int treatment = patient.getTreatmentArea();
-            if(condition ==2||treatment!=4)//病人为危重
+            if(condition ==2||treatment!=4)//病人为危重2
                 temp.add(patient);
             else if(condition ==1||treatment!=2)//病人为重
                 temp.add(patient);

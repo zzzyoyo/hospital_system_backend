@@ -19,6 +19,9 @@ public class Patient {
     private String name;
 
     @Column
+    private int newPatient = 1;//初始为新病人 1 ，修改为-1
+
+    @Column
     private int treatmentArea = 0;
 
     @Column
@@ -116,5 +119,13 @@ public class Patient {
 
     public void setNurse(Ward_nurse nurse) {
         this.nurse = nurse;
+    }
+
+    public int getNewPatient() {
+        return newPatient;
+    }
+
+    public void setNewPatient(int t) {
+        this.newPatient = t;
     }
 }

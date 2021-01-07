@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 @Service
@@ -45,6 +46,16 @@ public class HNurseService {
         Treatment_area treatmentArea = head_nurse.getTreatment_area();
         int area = treatmentArea.getType();
         Set<Patient>patients = patientRepository.findByTreatmentArea(area);
+        ArrayList<String>newPatients = new ArrayList<>();
+        for(Patient patient:patients){
+            if(patient.getNewPatient() ==1){
+                newPatients.add(patient.getNurse().getUsername());
+                patient.setNewPatient(-1);
+                patientRepository.save(patient);
+
+            }
+        }
+        returnMap.put("newPatients",newPatients);
         returnMap.put("area",area);
         Set<Ward_nurse> ward_nurseSet = treatmentArea.getWard_nurses();
         for(Ward_nurse nurse : ward_nurseSet) {
