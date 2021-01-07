@@ -81,10 +81,12 @@ public class DoctorService {
         int area = treatmentArea.getType();
         int anyCanLeave = 0;
         Set<Patient>patients = patientRepository.findByTreatmentArea(area);
+
         if(selectLeave(0,patients).size()>0){
             anyCanLeave =1;
         };
         returnMap.put("anyCanLeave",anyCanLeave);
+
         returnMap.put("area",area);
         String headNurse = treatmentArea.getHead_nurse().getUsername();
         returnMap.put("headNurse",headNurse);
@@ -354,6 +356,10 @@ public class DoctorService {
         if (leave == 2) return transPatients;
         Set<Patient> canLeave = new HashSet<>();
         for (Patient patient : transPatients) {
+            if(patient.getCondition_rating() != 0){
+                //必须是轻症患者!
+                continue;
+            }
             List<Daily_state_records> daily_state_recordsList = new ArrayList<Daily_state_records>(patient.getDaily_state_records());
             Collections.sort(daily_state_recordsList);
             List<Nucleic_acid_test_sheet> nucleic_acid_test_sheetList = new ArrayList<Nucleic_acid_test_sheet>(patient.getNucleic_acid_test_sheets());

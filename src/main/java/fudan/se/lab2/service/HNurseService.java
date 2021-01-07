@@ -47,6 +47,7 @@ public class HNurseService {
         int area = treatmentArea.getType();
         Set<Patient>patients = patientRepository.findByTreatmentArea(area);
         ArrayList<String>newPatients = new ArrayList<>();
+
         for(Patient patient:patients){
             if(patient.getNewPatient() ==1){
                 newPatients.add(patient.getNurse().getUsername());
@@ -98,6 +99,8 @@ public class HNurseService {
             }
         }
         returnMap.put("nullWardNurse", nullWardNurse);
+        //先随便返回一个newPatients
+
         return returnMap;
     }
 
