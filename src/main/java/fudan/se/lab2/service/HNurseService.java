@@ -87,6 +87,13 @@ public class HNurseService {
             }
         }
         returnMap.put("nullWardNurse", nullWardNurse);
+        //先随便返回一个newPatients
+        Set<String> newPatients = new HashSet<>();
+        newPatients.add("karry");
+        newPatients.add("marry");
+        newPatients.add("harry");
+        newPatients.add("garry");
+        returnMap.put("newPatients", newPatients);
         return returnMap;
     }
 
