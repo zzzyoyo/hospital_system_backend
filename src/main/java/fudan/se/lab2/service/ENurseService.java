@@ -69,8 +69,6 @@ public class ENurseService {
      *    area_type: int,//1 轻症 2 重症 4危重症，0隔离，3治疗
      *   rating: int,//0：轻症 1： 重症 2：危重，3不筛选
      *   status: int//0：住院 1：出院 2：死亡,3不筛选
-     * @param area_type
-     * @param isolated
      * @param rating
      * @param status
      * @return
