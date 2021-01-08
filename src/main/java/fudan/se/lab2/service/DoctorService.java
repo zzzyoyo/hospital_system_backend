@@ -302,7 +302,6 @@ public class DoctorService {
                 Ward_nurse ward_nurse = patient.getNurse();
                 ward_nurse.getPatients().remove(patient);
                 wardNurseRepository.save(ward_nurse);
-                patient.setTreatmentArea(0);
                 patient.setBed(null);
                 patient.setNurse(null);
                 patientRepository.save(patient);
