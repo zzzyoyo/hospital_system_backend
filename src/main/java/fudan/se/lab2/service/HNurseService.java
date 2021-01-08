@@ -51,7 +51,7 @@ public class HNurseService {
         for(Patient patient:patients){
             if(patient.getNewPatient() ==1){
                 System.out.println("new patient "+patient.getName());
-                newPatients.add(patient.getNurse().getUsername());
+                newPatients.add(patient.getName());
                 patient.setNewPatient(-1);
                 patientRepository.save(patient);
 

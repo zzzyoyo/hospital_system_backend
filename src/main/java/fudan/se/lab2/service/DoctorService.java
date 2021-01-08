@@ -11,6 +11,7 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import javax.xml.crypto.dsig.spec.XSLTTransformParameterSpec;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -141,6 +142,8 @@ public class DoctorService {
             patient = customerOptional.get();}
 
         assert patient !=null;
+        if(patient.getLiving_status() != 0)
+            return -1;
         patient.setCondition_rating(conditional_rating);
         patientRepository.save(patient);//无论怎样评级都是要改的
 
@@ -220,6 +223,9 @@ public class DoctorService {
         Optional<Patient> customerOptional= patientRepository.findById(patientId);
         if (customerOptional.isPresent()) {
             Patient patient = customerOptional.get();
+            if(patient.getLiving_status()!=0){
+                returnMap.put("transSuccess",0);
+            }
             int old_condition_rating  = patient.getCondition_rating();
             int old_area = patient.getTreatmentArea();
             int accType = movingPresentPatient(patientId,condition_rating);
@@ -228,7 +234,7 @@ public class DoctorService {
                 Set<Patient> waitingPatient = patientRepository.findByTreatmentArea(0);
                 if(!waitingPatient.isEmpty()){//隔离区有病人等待
                     for(Patient patient1:waitingPatient ){
-                        if(patient1.getCondition_rating()==old_condition_rating){
+                        if(patient1.getCondition_rating()==old_condition_rating&&patient1.getLiving_status()==0){
                             movingPresentPatient(patient1.getId(),condition_rating);
                             isolateFlag = 1;
                             break;
@@ -239,7 +245,9 @@ public class DoctorService {
                 if(isolateFlag ==0){//隔离区没有病人
                     Iterable<Patient>wrongPatient = patientRepository.findAll();
                     for(Patient patient1:wrongPatient){
-                        if(patient1.getCondition_rating() ==old_condition_rating&&patient1.getTreatmentArea()!=old_area){
+                        if(patient1.getCondition_rating() ==old_condition_rating
+                                &&patient1.getTreatmentArea()!=old_area
+                                &&patient1.getLiving_status()==0){
                             movingPresentPatient(patient1.getId(),old_condition_rating);
                             break;
                         }
@@ -338,12 +346,17 @@ public class DoctorService {
         for(Patient patient:statusPatients){
             int condition = patient.getCondition_rating();
             int treatment = patient.getTreatmentArea();
-            if(condition ==2||treatment!=4)//病人为危重2
+            if(condition ==2&&treatment!=4) {//病人为危重2
+                System.out.println("patient condition " + condition + "  treatmentArea " + treatment);
                 temp.add(patient);
-            else if(condition ==1||treatment!=2)//病人为重
+            }else if(condition ==1&&treatment!=2) {//病人为重
+                System.out.println("patient condition " + condition + "  treatmentArea " + treatment);
                 temp.add(patient);
-            else if(condition ==0||treatment!=1)//病人为轻
+            }else if(condition ==0&&treatment!=1) {//病人为轻
+                System.out.println("patient condition " + condition + "  treatmentArea " + treatment);
+
                 temp.add(patient);
+            }
         }//trans: int 是否待转入其他治疗区域，0是，1否，2都可以
         if(trans ==0){
             System.out.println("trans patient num : "+temp.size());
@@ -494,10 +507,15 @@ public class DoctorService {
          int condition_rating = addAcidTestRequest.getCondition_rating();//012,
         int result = addAcidTestRequest.getResult();//阴性 = 0，阳性 =1,
          Date date = addAcidTestRequest.getDate();// date类型
+        SimpleDateFormat time = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+        System.out.println("add Day"+ time.format(date));
 
         Patient patient = patientRepository.findByName(addAcidTestRequest.getPatientName());
         if(patient ==null)
             throw new UsernameNotFoundException(username);
+        if(patient.getLiving_status() !=0)
+            return "patient die";
+        int old_area = patient.getTreatmentArea();
         Nucleic_acid_test_sheet nucleic_acid_test_sheet = new Nucleic_acid_test_sheet();
         nucleic_acid_test_sheet.setPatient(patient);
         nucleic_acid_test_sheet.setResult(result);
@@ -506,6 +524,9 @@ public class DoctorService {
         nucleicAcidTestSheetRepository.save(nucleic_acid_test_sheet);
         patient.add_Nucleic_acid_test_sheet(nucleic_acid_test_sheet);
         patientRepository.save(patient);
+       if(old_area!=movingPresentPatient(patient.getId(),condition_rating)){
+           System.out.println("move patient because of new condition_rating");
+       };
         return "success";
 
 
