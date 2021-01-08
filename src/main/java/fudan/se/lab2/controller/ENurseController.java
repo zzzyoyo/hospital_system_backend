@@ -1,6 +1,7 @@
 package fudan.se.lab2.controller;
 
 import fudan.se.lab2.controller.request.AddPatientRequest;
+import fudan.se.lab2.controller.request.ENurseSelectRequest;
 import fudan.se.lab2.controller.request.OnlyNameRequest;
 import fudan.se.lab2.service.DoctorService;
 import fudan.se.lab2.service.ENurseService;
@@ -50,14 +51,11 @@ public class ENurseController {
      */
 
     @PostMapping("/selectAll")
-    public ResponseEntity<?>selectAll(@RequestParam (name = "area_type") int area_type,
-                                      @RequestParam (name = "isolated") int isolated,
-                                      @RequestParam (name = "rating") int rating,
-                                      @RequestParam (name = "status") int status){
+    public ResponseEntity<?>selectAll(@RequestBody ENurseSelectRequest eNurseSelectRequest){
         logger.debug("get a emergencyNurse select ");
 
         System.out.println("get a emergencyNurse select ");
-        return ResponseEntity.ok(eNurseService.selectAll(area_type, isolated, rating, status));    //有参ok 返回HttpStatus状态码和body内容
+        return ResponseEntity.ok(eNurseService.selectAll(eNurseSelectRequest.getArea_type(), eNurseSelectRequest.getIsolated(), eNurseSelectRequest.getRating(), eNurseSelectRequest.getRating()));    //有参ok 返回HttpStatus状态码和body内容
 
     }
 }
