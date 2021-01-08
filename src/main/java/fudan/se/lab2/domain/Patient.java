@@ -48,7 +48,7 @@ public class Patient {
         this.condition_rating = condition_rating;
         this.living_status = living_status;
         this.bed = null;
-
+        this.nurse = null;
     }
 
     public void add_Daily_state_records(Daily_state_records daily_state_record){

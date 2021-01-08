@@ -108,30 +108,32 @@ public class Lab2Application {
         }
 
         if(wardNurseRepository.findByUsername("wardNurse10") == null){
-            Ward_nurse ward_nurse10  = new Ward_nurse("wardNurse10","123456");
-            ward_nurse10.setTreatment_area(treatmentAreaRepository.findByType(1));
-            wardNurseRepository.save(ward_nurse10);
+            Ward_nurse ward_nurse14  = new Ward_nurse("wardNurse10","123456");
+            ward_nurse14.setTreatment_area(treatmentAreaRepository.findByType(4));
+            wardNurseRepository.save(ward_nurse14);
         }
 
         if(wardNurseRepository.findByUsername("wardNurse11") == null){
-            //空闲的护士
-            Ward_nurse ward_nurse11  = new Ward_nurse("wardNurse11","123456");
-            wardNurseRepository.save(ward_nurse11);
+            Ward_nurse ward_nurse13  = new Ward_nurse("wardNurse11","123456");
+            ward_nurse13.setTreatment_area(treatmentAreaRepository.findByType(4));
+            wardNurseRepository.save(ward_nurse13);
         }
         if(wardNurseRepository.findByUsername("wardNurse12") == null){
             Ward_nurse ward_nurse12  = new Ward_nurse("wardNurse12","123456");
             ward_nurse12.setTreatment_area(treatmentAreaRepository.findByType(4));
             wardNurseRepository.save(ward_nurse12);
         }
+
         if(wardNurseRepository.findByUsername("wardNurse13") == null){
-            Ward_nurse ward_nurse13  = new Ward_nurse("wardNurse13","123456");
-            ward_nurse13.setTreatment_area(treatmentAreaRepository.findByType(4));
-            wardNurseRepository.save(ward_nurse13);
+            //空闲的护士
+            Ward_nurse ward_nurse10  = new Ward_nurse("wardNurse13","123456");
+            wardNurseRepository.save(ward_nurse10);
         }
+
         if(wardNurseRepository.findByUsername("wardNurse14") == null){
-            Ward_nurse ward_nurse14  = new Ward_nurse("wardNurse14","123456");
-            ward_nurse14.setTreatment_area(treatmentAreaRepository.findByType(4));
-            wardNurseRepository.save(ward_nurse14);
+            //空闲的护士
+            Ward_nurse ward_nurse11  = new Ward_nurse("wardNurse14","123456");
+            wardNurseRepository.save(ward_nurse11);
         }
     }
     public void init_headNurse(TreatmentAreaRepository treatmentAreaRepository,
@@ -233,16 +235,27 @@ public class Lab2Application {
     }
 
     public void init_patient(PatientRepository patientRepository, WardNurseRepository wardNurseRepository){
-        Ward_nurse ward_nurse = wardNurseRepository.findByUsername("wardNurse1");
-        if(patientRepository.findByName("patient1")==null){
-            Patient patient1 = new Patient("patient1", 0,0);
-            patient1.setNurse(ward_nurse);
-            patientRepository.save(patient1);
+        //16轻症病人
+        for (int i = 1;i <= 16; i++){
+            if(patientRepository.findByName("patient"+i)==null){
+                Patient patient = new Patient("patient"+i, 0,0);
+                patientRepository.save(patient);
+            }
         }
-        if(patientRepository.findByName("patient2") == null){
-            Patient patient2 = new Patient("patient2", 0,0);
-            patient2.setNurse(ward_nurse);
-            patientRepository.save(patient2);
+
+        //重症4个
+        for (int i = 17;i <= 20; i++){
+            if(patientRepository.findByName("patient"+i)==null){
+                Patient patient = new Patient("patient"+i, 1,0);
+                patientRepository.save(patient);
+            }
+        }
+        //危重症5个
+        for (int i = 21;i <= 25; i++){
+            if(patientRepository.findByName("patient"+i)==null){
+                Patient patient = new Patient("patient"+i, 2,0);
+                patientRepository.save(patient);
+            }
         }
 
     }
@@ -254,35 +267,79 @@ public class Lab2Application {
      */
     public void set_wardNurse_patient_bed(TreatmentAreaRepository treatmentAreaRepository, WardNurseRepository wardNurseRepository,
                                           PatientRepository patientRepository, BedRepository bedRepository){
-        Ward_nurse ward_nurse = wardNurseRepository.findByUsername("wardNurse1");
-        Set<Patient> patientSet = new HashSet<>();
+        //16个轻症病人，有3个护士，所以其中12个在轻症病区，3个在隔离区
         Treatment_area treatment_area = treatmentAreaRepository.findByType(1);
         Set<Bed> beds = treatment_area.getBeds();
-        Patient patient1 = patientRepository.findByName("patient1");
-        Patient patient2 = patientRepository.findByName("patient2");
-        //nurse--patient
-        patientSet.add(patient1);
-        patientSet.add(patient2);
-        ward_nurse.setPatients(patientSet);
-        patient1.setNurse(ward_nurse);
-        patient1.setTreatmentArea(1);
-        patient2.setNurse(ward_nurse);
-        patient2.setTreatmentArea(1);
-        wardNurseRepository.save(ward_nurse);
-        //bed--patient
         Iterator<Bed> bedIterable = beds.iterator();
-        Bed bed1 = bedIterable.next();
-        bed1.setPatient(patient1);
-        patient1.setBed(bed1);
-        bedRepository.save(bed1);
-        Bed bed2 = bedIterable.next();
-        bed2.setPatient(patient2);
-        patient2.setBed(bed2);
-        bedRepository.save(bed2);
+        for(int i = 1; i<= 3; i ++){
+            String wardNurseName = "wardNurse"+i;
+            Ward_nurse ward_nurse = wardNurseRepository.findByUsername(wardNurseName);
+            for(int j = 1; j <= 3; j++){
+                String patientName = "patient"+((i-1)*3+(j));
+                if(patientRepository.findByName(patientName)!=null){
+                    //护士、病区、病床
+                    Patient patient = patientRepository.findByName(patientName);
+                    patient.setNurse(ward_nurse);
+                    patient.setTreatmentArea(1);
+                    Bed bed = bedIterable.next();
+                    patient.setBed(bed);
+                    patientRepository.save(patient);
+                    bedRepository.save(bed);
+                    ward_nurse.addPatients(patient);
+                }
+            }
+            //护士和病人两边都要save
+            wardNurseRepository.save(ward_nurse);
+        }
 
-        //save
-        patientRepository.save(patient1);
-        patientRepository.save(patient2);
+        //重症4个,3个护士(456)，够的
+        treatment_area = treatmentAreaRepository.findByType(2);
+        beds = treatment_area.getBeds();
+        bedIterable = beds.iterator();
+        for(int i = 4; i<= 5; i ++){
+            String wardNurseName = "wardNurse"+i;
+            Ward_nurse ward_nurse = wardNurseRepository.findByUsername(wardNurseName);
+            for(int j = 1; j <= 2; j++){
+                String patientName = "patient"+(16+(i-4)*2+(j));
+                if(patientRepository.findByName(patientName)!=null){
+                    System.out.println("set for "+patientName);
+                    //护士、病区、病床
+                    Patient patient = patientRepository.findByName(patientName);
+                    patient.setNurse(ward_nurse);
+                    patient.setTreatmentArea(2);
+                    Bed bed = bedIterable.next();
+                    patient.setBed(bed);
+                    patientRepository.save(patient);
+                    bedRepository.save(bed);
+                    ward_nurse.addPatients(patient);
+                }
+            }
+            //护士和病人两边都要save
+            wardNurseRepository.save(ward_nurse);
+        }
+
+        //5个危重症
+        treatment_area = treatmentAreaRepository.findByType(4);
+        beds = treatment_area.getBeds();
+        bedIterable = beds.iterator();
+        for(int i = 7; i<= 11; i ++){
+            String wardNurseName = "wardNurse"+i;
+            Ward_nurse ward_nurse = wardNurseRepository.findByUsername(wardNurseName);
+            String patientName = "patient"+(20+(i-6));
+            if(patientRepository.findByName(patientName)!=null){
+                //护士、病区、病床
+                Patient patient = patientRepository.findByName(patientName);
+                patient.setNurse(ward_nurse);
+                patient.setTreatmentArea(4);
+                Bed bed = bedIterable.next();
+                patient.setBed(bed);
+                patientRepository.save(patient);
+                bedRepository.save(bed);
+                ward_nurse.addPatients(patient);
+                //护士和病人两边都要save
+                wardNurseRepository.save(ward_nurse);
+            }
+        }
     }
 
     public void init_emergencyNurse(EmergencyNurseRepository emergencyNurseRepository){
@@ -293,9 +350,11 @@ public class Lab2Application {
     }
 
     public void init_bed(BedRepository bedRepository, TreatmentAreaRepository treatmentAreaRepository){
+        //轻症、重症、危重症治疗区域的一间病房内分别设有 4 张、2 张和 1 张病床
+        //各设10间病房
         Treatment_area treatment_area = treatmentAreaRepository.findByType(1);
         if(treatment_area.getBeds().size() == 0){
-            for(int i = 0;i < 10; i++){
+            for(int i = 0;i < 10*4; i++){
                 Bed bed = new Bed(treatment_area);
                 bedRepository.save(bed);
                 treatment_area.addBeds(bed);
@@ -304,7 +363,7 @@ public class Lab2Application {
         }
         Treatment_area treatment_area2 = treatmentAreaRepository.findByType(2);
         if(treatment_area2.getBeds().size() == 0){
-            for(int i = 0;i < 10; i++){
+            for(int i = 0;i < 10*2; i++){
                 Bed bed = new Bed(treatment_area2);
                 bedRepository.save(bed);
                 treatment_area2.addBeds(bed);
@@ -323,6 +382,15 @@ public class Lab2Application {
 
     }
     public void set_nucleic_test(NucleicAcidTestSheetRepository nucleicAcidTestSheetRepository, PatientRepository patientRepository){
+        //每个入院的病人都必须有至少一张核酸检测单
+        for(int i = 1; i <= 25;i++){
+            Patient patient = patientRepository.findByName("patient"+i);
+            Nucleic_acid_test_sheet nucleic_acid_test_sheet = new Nucleic_acid_test_sheet(0, 0, patient);
+            nucleicAcidTestSheetRepository.save(nucleic_acid_test_sheet);
+            patient.add_Nucleic_acid_test_sheet(nucleic_acid_test_sheet);
+            patientRepository.save(patient);
+        }
+        //patient12有两张
         Patient patient1 = patientRepository.findByName("patient1");
         Nucleic_acid_test_sheet nucleic_acid_test_sheet1 = new Nucleic_acid_test_sheet(0,0,patient1);
         nucleicAcidTestSheetRepository.save(nucleic_acid_test_sheet1);
