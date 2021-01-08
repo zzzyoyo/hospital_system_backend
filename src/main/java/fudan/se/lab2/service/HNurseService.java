@@ -195,26 +195,6 @@ public class HNurseService {
 
     }
 
-    public Map<String, Object> select(int type, int leave,int trans,int status){
-        System.out.println("type: "+type+"  leave: "+leave+"  trans: "+trans+"  status: "+status);
-        Map<String,Object>returnMap = new HashMap<>();
-        System.out.println("area type "+type);
-        Set<Patient> areaPatients = patientRepository.findByTreatmentArea(type);
-        System.out.println("area patient num : "+areaPatients.size());
-        Set<Patient>patients =selectLeave(leave,selectTrans(trans,selectStatus(status,areaPatients)));
-        Set<Map> p_set = new HashSet<>();
-        for(Patient patient:patients){
-            Map<String , Object>temp = new HashMap<>();
-            temp.put("patientID",patient.getId());
-            temp.put("username",patient.getName());
-            temp.put("condition_rating",patient.getCondition_rating());
-            temp.put("living_status",patient.getLiving_status());
-            p_set.add(temp);
-        }
-        returnMap.put("patient_tableData",p_set);
-        return returnMap;
-
-    }
 
     public int addNurse(String nurseName, int area_type){
         System.out.println("add nurse "+nurseName);
@@ -227,7 +207,7 @@ public class HNurseService {
                 treatmentAreaRepository.save(treatment_area);
                 ward_nurse.setTreatment_area(treatment_area);
                 wardNurseRepository.save(ward_nurse);
-                System.out.println("add patient NUM"+addPatientByNurse(area_type));
+                System.out.println("add patient success?  "+movePatient(area_type));
 
                 return 0;
             }
@@ -236,77 +216,130 @@ public class HNurseService {
         return -1;
     }
 
+    public int rate2area(int rate){
+        int area = 0;
+        switch (rate){
+            case 0:
+                area =1;
 
+            case 1:
+                area = 2;
+            case 2:
+                area = 4;
 
-    public int addPatientByNurse(int type){
-        int addP = 0;
-        Set<Patient>isolated = patientRepository.findByTreatmentArea(0);
-        System.out.println("isolated num: "+isolated.size());
-        for(Patient patient:isolated){
-            int conditional_rating = patient.getCondition_rating();
-            int living_status = patient.getLiving_status();
-            if(living_status!=0)
-                continue;//这个病人没住院，不管他
-            String description = null;
-            int patientNumPerNurse = 0;
-            switch (conditional_rating){
-                case 0:{
-                    type = 1;
-                    description = "轻症区域";
-                    patientNumPerNurse = 3;
-                    break;
-                }
-                case 1:{
-                    type = 2;
-                    description = "重症区域";
-                    patientNumPerNurse = 2;
-                    break;
-                }
-                case 2:{
-                    type = 4;
-                    description = "危重症区域";
-                    patientNumPerNurse = 1;
-                    break;
-                }
-                default:{
+        }
+        return  area;
+    }
+    public int movingPresentPatient(Long patientId){
+        Optional<Patient> customerOptional= patientRepository.findById(patientId);
+        Patient patient =null;
+        if (customerOptional.isPresent()) {
+            patient = customerOptional.get();}
+
+        assert patient !=null;
+        if(patient.getLiving_status() != 0)
+            return -1;
+
+        int conditional_rating = patient.getCondition_rating();
+        int type = 0;
+        int patientNumPerNurse = 0;
+        String description = "";
+        switch (conditional_rating){
+            case 0:{
+                type = 1;
+                description = "轻症区域";
+                patientNumPerNurse = 3;
+                break;
+            }
+            case 1:{
+                type = 2;
+                description = "重症区域";
+                patientNumPerNurse = 2;
+                break;
+            }
+            case 2:{
+                type = 4;
+                description = "危重症区域";
+                patientNumPerNurse = 1;
+                break;
+            }
+            default:{
+                break;
+            }
+        }
+        Set<Bed> beds = treatmentAreaRepository.findByType(type).getBeds();
+        Set<Ward_nurse> ward_nurses = treatmentAreaRepository.findByType(type).getWard_nurses();
+        int bedNum = beds.size();
+        int patientNum = patientRepository.findByTreatmentArea(type).size();
+        int nurseNum = ward_nurses.size();
+        System.out.println("bed Num: "+bedNum+"  ,patientNum "+patientNum+
+                "   nurseNum * patientNumPerNurse: "+ nurseNum * patientNumPerNurse);
+        if(patientNum < bedNum && patientNum < nurseNum * patientNumPerNurse) {
+
+            System.out.println("patient " + patient.getName() + "  do not need to stay in present area");
+            Bed oldBed = patient.getBed();
+            oldBed.setPatient(null);
+            bedRepository.save(oldBed);
+            patient.setNewPatient(1);//newPatient
+            patient.setTreatmentArea(type);
+            patient.setBed(null);
+            for (Bed bed : beds) {
+                if (bed.getPatient() == null) {
+                    bed.setPatient(patient);
+                    patient.setBed(bed);
+                    bedRepository.save(bed);
                     break;
                 }
             }
-            Set<Bed> beds = treatmentAreaRepository.findByType(type).getBeds();
-            Set<Ward_nurse> ward_nurses = treatmentAreaRepository.findByType(type).getWard_nurses();
-            int bedNum = beds.size();
-            int patientNum = patientRepository.findByTreatmentArea(type).size();//当前病人
-            int nurseNum = ward_nurses.size();//当前护士
-            System.out.println("bed Num: "+bedNum+"  ,patientNum "+patientNum+
-                    "   nurseNum * patientNumPerNurse: "+ nurseNum * patientNumPerNurse);
-            if(patientNum < bedNum &&
-                    patientNum < nurseNum * patientNumPerNurse){
-                System.out.println("patient "+patient.getName()+"  do not need to stay in isolated area");
-                addP+=1;
-                patient.setTreatmentArea(type);
-                for(Bed bed: beds){
-                    if(bed.getPatient() == null){
-                        bed.setPatient(patient);
-                        patient.setBed(bed);
-                        bedRepository.save(bed);
-                        break;
-                    }
+            Ward_nurse oldNurse = patient.getNurse();
+            oldNurse.getPatients().remove(patient);
+            patient.setNurse(null);
+            wardNurseRepository.save(oldNurse);
+            for (Ward_nurse nurse : ward_nurses) {
+                if (nurse.getPatients().size() < patientNumPerNurse) {
+                    nurse.addPatients(patient);
+                    wardNurseRepository.save(nurse);
+                    System.out.println("nurse " + nurse.getUsername() + " add patient " + patient.getName());
+                    patient.setNurse(nurse);
+                    break;
                 }
-                for(Ward_nurse nurse : ward_nurses){
+            }
+            patientRepository.save(patient);
+            return type;//移动病人成功
+        }
+        return -1;//移动病人失败
 
-                    if(nurse.getPatients().size() < patientNumPerNurse){
-                        nurse.addPatients(patient);
-                        System.out.println("nurse "+nurse.getUsername()+" add patient "+patient.getName());
-                        patient.setNurse(nurse);
-                        wardNurseRepository.save(nurse);
-                        break;
-                    }
+    }
+    private int movePatient( int area) {
+        int isolateFlag = 0;
+        Set<Patient> waitingPatient = patientRepository.findByTreatmentArea(0);
+        if (!waitingPatient.isEmpty()) {//隔离区有病人等待
+            for (Patient patient1 : waitingPatient) {
+                if ((rate2area(patient1.getCondition_rating()) == area)
+                        && patient1.getTreatmentArea() != rate2area(patient1.getCondition_rating())
+                        && patient1.getLiving_status() == 0) {
+                    isolateFlag = 1;
+                    return movingPresentPatient(patient1.getId());
+
                 }
-
             }
 
         }
+        if (isolateFlag == 0) {//隔离区没有病人
+            Iterable<Patient> wrongPatient = patientRepository.findAll();
+            for (Patient patient1 : wrongPatient) {
+                if ((rate2area(patient1.getCondition_rating()) == area)
+                        && patient1.getTreatmentArea() != rate2area(patient1.getCondition_rating())
+                        && patient1.getLiving_status() == 0) {
 
-        return addP;
+                   return  movingPresentPatient(patient1.getId());
+
+                }
+            }
+        }
+        return -1;
     }
+
+
+
 }
