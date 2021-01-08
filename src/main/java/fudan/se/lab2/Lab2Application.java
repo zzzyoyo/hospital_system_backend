@@ -151,6 +151,8 @@ public class Lab2Application {
             Ward_nurse ward_nurse11  = new Ward_nurse("wardNurse16","123456");
             wardNurseRepository.save(ward_nurse11);
         }
+
+        
     }
     public void init_headNurse(TreatmentAreaRepository treatmentAreaRepository,
                                HeadNurseRepository headNurseRepository){

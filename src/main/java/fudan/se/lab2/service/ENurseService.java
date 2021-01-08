@@ -143,8 +143,9 @@ public class ENurseService {
         }
         Patient patient = new Patient(name, conditional_rating, 0);//living status
         patientRepository.save(patient);
+        patient = patientRepository.findByName(name);
         Nucleic_acid_test_sheet nucleic_acid_test_sheet = new Nucleic_acid_test_sheet();
-        nucleic_acid_test_sheet.setPatient(patientRepository.findByName(name));
+        nucleic_acid_test_sheet.setPatient(patient);
         nucleic_acid_test_sheet.setConditional_rating(conditional_rating);
         nucleic_acid_test_sheet.setDate(date);
         nucleic_acid_test_sheet.setResult(result);
@@ -213,6 +214,7 @@ public class ENurseService {
         else {
             returnMap.put("area","隔离区域");
         }
+//        patientRepository.save(patient);//这里不用save就能将修改保存，save了反倒会包duplicate key的错，应该是上面已经save过一次
         return returnMap;
     }
 
