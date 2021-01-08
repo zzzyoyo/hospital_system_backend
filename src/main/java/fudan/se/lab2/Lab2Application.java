@@ -138,6 +138,19 @@ public class Lab2Application {
             Ward_nurse ward_nurse11  = new Ward_nurse("wardNurse14","123456");
             wardNurseRepository.save(ward_nurse11);
         }
+
+
+        if(wardNurseRepository.findByUsername("wardNurse15") == null){
+            //空闲的护士
+            Ward_nurse ward_nurse10  = new Ward_nurse("wardNurse15","123456");
+            wardNurseRepository.save(ward_nurse10);
+        }
+
+        if(wardNurseRepository.findByUsername("wardNurse16") == null){
+            //空闲的护士
+            Ward_nurse ward_nurse11  = new Ward_nurse("wardNurse16","123456");
+            wardNurseRepository.save(ward_nurse11);
+        }
     }
     public void init_headNurse(TreatmentAreaRepository treatmentAreaRepository,
                                HeadNurseRepository headNurseRepository){
@@ -286,6 +299,7 @@ public class Lab2Application {
                     patient.setTreatmentArea(1);
                     Bed bed = bedIterable.next();
                     patient.setBed(bed);
+                    bed.setPatient(patient);
                     patientRepository.save(patient);
                     bedRepository.save(bed);
                     ward_nurse.addPatients(patient);
@@ -311,6 +325,7 @@ public class Lab2Application {
                     patient.setTreatmentArea(2);
                     Bed bed = bedIterable.next();
                     patient.setBed(bed);
+                    bed.setPatient(patient);
                     patientRepository.save(patient);
                     bedRepository.save(bed);
                     ward_nurse.addPatients(patient);
@@ -327,6 +342,7 @@ public class Lab2Application {
         ward_nurse6.addPatients(patient10);
         Bed bed1 = bedIterable.next();
         patient10.setBed(bed1);
+        bed1.setPatient(patient10);
         patientRepository.save(patient10);
         wardNurseRepository.save(ward_nurse6);
         bedRepository.save(bed1);
@@ -346,6 +362,7 @@ public class Lab2Application {
                 patient.setTreatmentArea(4);
                 Bed bed = bedIterable.next();
                 patient.setBed(bed);
+                bed.setPatient(patient);
                 patientRepository.save(patient);
                 bedRepository.save(bed);
                 ward_nurse.addPatients(patient);
@@ -361,6 +378,7 @@ public class Lab2Application {
         ward_nurse12.addPatients(patient11);
         Bed bed2 = bedIterable.next();
         patient11.setBed(bed2);
+        bed2.setPatient(patient11);
         patientRepository.save(patient11);
         wardNurseRepository.save(ward_nurse12);
         bedRepository.save(bed2);
