@@ -363,8 +363,8 @@ public class DoctorService {
         if (leave == 2) return transPatients;
         Set<Patient> canLeave = new HashSet<>();
         for (Patient patient : transPatients) {
-            if(patient.getCondition_rating() != 0){
-                //必须是轻症患者!
+            if(patient.getCondition_rating() != 0 || patient.getLiving_status() != 0){
+                //必须是轻症患者且正在住院
                 continue;
             }
             List<Daily_state_records> daily_state_recordsList = new ArrayList<Daily_state_records>(patient.getDaily_state_records());
