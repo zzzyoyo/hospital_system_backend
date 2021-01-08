@@ -183,10 +183,14 @@ public class DoctorService {
         if(patientNum < bedNum && patientNum < nurseNum * patientNumPerNurse) {
 
             System.out.println("patient " + patient.getName() + "  do not need to stay in present area");
-            Bed oldBed = patient.getBed();
-            if(oldBed!=null){
-            oldBed.setPatient(null);
-            bedRepository.save(oldBed);
+  if(patient.getTreatmentArea()!=0){
+                //隔离区的没有病床所以不需要解绑和病床的关系
+                Bed oldBed = patient.getBed();
+                oldBed.setPatient(null);
+                bedRepository.save(oldBed);
+                Ward_nurse oldNurse = patient.getNurse();
+                oldNurse.getPatients().remove(patient);
+                wardNurseRepository.save(oldNurse);
             }
             patient.setNewPatient(1);//newPatient
             patient.setTreatmentArea(type);

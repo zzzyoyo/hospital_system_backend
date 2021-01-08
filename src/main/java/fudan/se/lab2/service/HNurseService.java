@@ -101,6 +101,7 @@ public class HNurseService {
             }
         }
         returnMap.put("nullWardNurse", nullWardNurse);
+        returnMap.put("nullWardNurse", nullWardNurse);
         //先随便返回一个newPatients
 
         return returnMap;
