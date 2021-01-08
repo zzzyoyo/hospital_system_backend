@@ -185,7 +185,6 @@ public class DoctorService {
             System.out.println("patient " + patient.getName() + "  do not need to stay in present area");
          if(patient.getTreatmentArea()!=0){
                 //隔离区的没有病床所以不需要解绑和病床的关系
-                //非隔离区：和旧的病床/护士解绑
                 Bed oldBed = patient.getBed();
                 oldBed.setPatient(null);
                 bedRepository.save(oldBed);
@@ -196,7 +195,7 @@ public class DoctorService {
             patient.setNewPatient(1);//newPatient
             patient.setTreatmentArea(type);
             patient.setBed(null);
-            for (Bed bed : beds) {//目标病区的窗
+            for (Bed bed : beds) {
                 if (bed.getPatient() == null) {
                     bed.setPatient(patient);
                     patient.setBed(bed);
@@ -204,12 +203,12 @@ public class DoctorService {
                     break;
                 }
             }
-           /* Ward_nurse oldNurse = patient.getNurse();
+            Ward_nurse oldNurse = patient.getNurse();
             if(oldNurse!=null) {
                 oldNurse.getPatients().remove(patient);
                 wardNurseRepository.save(oldNurse);
             }
-            patient.setNurse(null);*/
+            patient.setNurse(null);
             for (Ward_nurse nurse : ward_nurses) {
                 if (nurse.getPatients().size() < patientNumPerNurse) {
                     nurse.addPatients(patient);
@@ -425,13 +424,30 @@ public class DoctorService {
 
             List<Nucleic_acid_test_sheet> nucleic_acid_test_sheetList = new ArrayList<Nucleic_acid_test_sheet>(patient.getNucleic_acid_test_sheets());
             int nulen = nucleic_acid_test_sheetList.size();
+            //最新的核酸检测时间
+            Date present = nucleic_acid_test_sheetList.get(0).getDate();
+            Calendar rightNow = Calendar.getInstance();
+            rightNow.setTime(present);
+            rightNow.add(Calendar.DAY_OF_YEAR,-1);//日期-1
+            Date before=rightNow.getTime();
+            int total = 0;
+            int good = 0;
+            //判断所有在最新核酸检测时间前24小时内的所有核酸检测是否都为阴性
+            for(Nucleic_acid_test_sheet nucleic_acid_test_sheet:nucleic_acid_test_sheetList){
+                if(nucleic_acid_test_sheet.getDate().compareTo(present)<=0&&
+                        nucleic_acid_test_sheet.getDate().compareTo(before)>=0 ){
+                    total+=1;
+                    if(nucleic_acid_test_sheet.getResult() ==0)
+                        good+=1;
+                }
+            }
             int len = daily_state_recordsList.size();
             if (len > 2 && nulen > 1) {
+                //判断最近三次体温+核酸检测是否满足
                 if (daily_state_recordsList.get(len - 1).getTemperature() < 37.3 &&
                         daily_state_recordsList.get(len - 2).getTemperature() < 37.3 &&
                         daily_state_recordsList.get(len - 3).getTemperature() < 37.3&&
-                        daily_state_recordsList.get(len - 1).getNucleic_acid_test_result() ==0&&
-                        daily_state_recordsList.get(len - 2).getNucleic_acid_test_result() ==0
+                        good ==total
                )
                     canLeave.add(patient);
             }

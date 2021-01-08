@@ -136,14 +136,33 @@ public class HNurseService {
                 treatmentAreaRepository.save(treatment_area);
                 ward_nurse.setTreatment_area(treatment_area);
                 wardNurseRepository.save(ward_nurse);
-                System.out.println("after ward nurse num："+ treatmentAreaRepository.findByType(area_type).getWard_nurses().size());
-                System.out.println("add patient success?  "+movePatient(area_type));
-
+                System.out.println("after ward nurse num："+
+                        treatmentAreaRepository.findByType(area_type).getWard_nurses().size());
+                int pNum = area2nurseNum(area_type);
+                for(int i =0;i<pNum;i++){
+                    movePatient(area_type);
+                }
+               // System.out.println("add patient success?  "+movePatient(area_type));
                 return 0;
             }
         }
-
         return -1;
+    }
+    public int area2nurseNum(int area){
+        int nurseNum =0;
+        switch (area){
+            case 1:
+                nurseNum =3;
+                break;
+            case 2:
+                nurseNum = 2;
+                break;
+            case  4:
+                nurseNum = 1;
+                break;
+
+        }
+        return  nurseNum;
     }
 
     public int rate2area(int rate){
@@ -210,9 +229,17 @@ public class HNurseService {
         if(patientNum < bedNum && patientNum < nurseNum * patientNumPerNurse) {
 
             System.out.println("patient " + patient.getName() + "  do not need to stay in present area");
-            Bed oldBed = patient.getBed();
-            oldBed.setPatient(null);
-            bedRepository.save(oldBed);
+            if(patient.getTreatmentArea()!=0){
+                //隔离区的没有病床所以不需要解绑和病床的关系
+                //非隔离区：和旧的病床/护士解绑
+                Bed oldBed = patient.getBed();
+                oldBed.setPatient(null);
+                bedRepository.save(oldBed);
+                Ward_nurse oldNurse = patient.getNurse();
+                oldNurse.getPatients().remove(patient);
+                wardNurseRepository.save(oldNurse);
+            }
+
             patient.setNewPatient(1);//newPatient
             patient.setTreatmentArea(type);
             patient.setBed(null);
@@ -224,10 +251,7 @@ public class HNurseService {
                     break;
                 }
             }
-            Ward_nurse oldNurse = patient.getNurse();
-            oldNurse.getPatients().remove(patient);
-            patient.setNurse(null);
-            wardNurseRepository.save(oldNurse);
+
             for (Ward_nurse nurse : ward_nurses) {
                 if (nurse.getPatients().size() < patientNumPerNurse) {
                     nurse.addPatients(patient);
