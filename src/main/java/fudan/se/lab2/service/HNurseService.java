@@ -50,12 +50,14 @@ public class HNurseService {
 
         for(Patient patient:patients){
             if(patient.getNewPatient() ==1){
+                System.out.println("new patient "+patient.getName());
                 newPatients.add(patient.getNurse().getUsername());
                 patient.setNewPatient(-1);
                 patientRepository.save(patient);
 
             }
         }
+        System.out.println("new patient num "+newPatients.size());
         returnMap.put("newPatients",newPatients);
         returnMap.put("area",area);
         Set<Ward_nurse> ward_nurseSet = treatmentArea.getWard_nurses();
@@ -105,8 +107,10 @@ public class HNurseService {
     }
 
     public int deleteNurse(String nurseName, int area_type){
+        System.out.println("delete nurse "+nurseName);
         Ward_nurse ward_nurse = wardNurseRepository.findByUsername(nurseName);
         if(ward_nurse.getTreatment_area().getType() == area_type){
+
             Treatment_area treatment_area = treatmentAreaRepository.findByType(area_type);
             treatment_area.getWard_nurses().remove(ward_nurse);
             treatmentAreaRepository.save(treatment_area);
@@ -213,6 +217,7 @@ public class HNurseService {
     }
 
     public int addNurse(String nurseName, int area_type){
+        System.out.println("add nurse "+nurseName);
         Ward_nurse ward_nurse = wardNurseRepository.findByUsername(nurseName);
         if(ward_nurse.getTreatment_area() == null){
             Treatment_area treatment_area = treatmentAreaRepository.findByType(area_type);
@@ -222,9 +227,86 @@ public class HNurseService {
                 treatmentAreaRepository.save(treatment_area);
                 ward_nurse.setTreatment_area(treatment_area);
                 wardNurseRepository.save(ward_nurse);
+                System.out.println("add patient NUM"+addPatientByNurse(area_type));
+
                 return 0;
             }
         }
+
         return -1;
+    }
+
+
+
+    public int addPatientByNurse(int type){
+        int addP = 0;
+        Set<Patient>isolated = patientRepository.findByTreatmentArea(0);
+        System.out.println("isolated num: "+isolated.size());
+        for(Patient patient:isolated){
+            int conditional_rating = patient.getCondition_rating();
+            int living_status = patient.getLiving_status();
+            if(living_status!=0)
+                continue;//这个病人没住院，不管他
+            String description = null;
+            int patientNumPerNurse = 0;
+            switch (conditional_rating){
+                case 0:{
+                    type = 1;
+                    description = "轻症区域";
+                    patientNumPerNurse = 3;
+                    break;
+                }
+                case 1:{
+                    type = 2;
+                    description = "重症区域";
+                    patientNumPerNurse = 2;
+                    break;
+                }
+                case 2:{
+                    type = 4;
+                    description = "危重症区域";
+                    patientNumPerNurse = 1;
+                    break;
+                }
+                default:{
+                    break;
+                }
+            }
+            Set<Bed> beds = treatmentAreaRepository.findByType(type).getBeds();
+            Set<Ward_nurse> ward_nurses = treatmentAreaRepository.findByType(type).getWard_nurses();
+            int bedNum = beds.size();
+            int patientNum = patientRepository.findByTreatmentArea(type).size();//当前病人
+            int nurseNum = ward_nurses.size();//当前护士
+            System.out.println("bed Num: "+bedNum+"  ,patientNum "+patientNum+
+                    "   nurseNum * patientNumPerNurse: "+ nurseNum * patientNumPerNurse);
+            if(patientNum < bedNum &&
+                    patientNum < nurseNum * patientNumPerNurse){
+                System.out.println("patient "+patient.getName()+"  do not need to stay in isolated area");
+                addP+=1;
+                patient.setTreatmentArea(type);
+                for(Bed bed: beds){
+                    if(bed.getPatient() == null){
+                        bed.setPatient(patient);
+                        patient.setBed(bed);
+                        bedRepository.save(bed);
+                        break;
+                    }
+                }
+                for(Ward_nurse nurse : ward_nurses){
+
+                    if(nurse.getPatients().size() < patientNumPerNurse){
+                        nurse.addPatients(patient);
+                        System.out.println("nurse "+nurse.getUsername()+" add patient "+patient.getName());
+                        patient.setNurse(nurse);
+                        wardNurseRepository.save(nurse);
+                        break;
+                    }
+                }
+
+            }
+
+        }
+
+        return addP;
     }
 }
