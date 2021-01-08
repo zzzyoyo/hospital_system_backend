@@ -152,7 +152,23 @@ public class Lab2Application {
             wardNurseRepository.save(ward_nurse11);
         }
 
-        
+        //重症再加几个护士
+        for(int i = 17; i<= 30;i++){
+            if(wardNurseRepository.findByUsername("wardNurse"+i) == null){
+                Ward_nurse ward_nurse11  = new Ward_nurse("wardNurse"+i,"123456");
+                ward_nurse11.setTreatment_area(treatmentAreaRepository.findByType(2));
+                wardNurseRepository.save(ward_nurse11);
+            }
+        }
+
+        //危重症再加几个护士
+        for(int i = 31; i<= 50;i++){
+            if(wardNurseRepository.findByUsername("wardNurse"+i) == null){
+                Ward_nurse ward_nurse11  = new Ward_nurse("wardNurse"+i,"123456");
+                ward_nurse11.setTreatment_area(treatmentAreaRepository.findByType(4));
+                wardNurseRepository.save(ward_nurse11);
+            }
+        }
     }
     public void init_headNurse(TreatmentAreaRepository treatmentAreaRepository,
                                HeadNurseRepository headNurseRepository){
