@@ -347,6 +347,7 @@ public class DoctorService {
 
     }
     public Set<Patient> selectTrans(int trans,Set<Patient>statusPatients){
+        System.out.println("selectTrans,trans="+trans);
         if(trans==2)//先返回一个，防止出错
             return statusPatients;
         Set<Patient>temp = new HashSet<>();//等待转院的
@@ -380,6 +381,7 @@ public class DoctorService {
 
     }
     public Set<Patient> selectLeave(int leave,Set<Patient>transPatients) {
+//        System.out.println("selectLeave,leave="+leave);
         if (leave == 2) return transPatients;
         Set<Patient> canLeave = new HashSet<>();
         for (Patient patient : transPatients) {
