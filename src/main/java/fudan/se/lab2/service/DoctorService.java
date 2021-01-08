@@ -184,8 +184,10 @@ public class DoctorService {
 
             System.out.println("patient " + patient.getName() + "  do not need to stay in present area");
             Bed oldBed = patient.getBed();
+            if(oldBed!=null){
             oldBed.setPatient(null);
             bedRepository.save(oldBed);
+            }
             patient.setNewPatient(1);//newPatient
             patient.setTreatmentArea(type);
             patient.setBed(null);
@@ -198,9 +200,11 @@ public class DoctorService {
                 }
             }
             Ward_nurse oldNurse = patient.getNurse();
-            oldNurse.getPatients().remove(patient);
+            if(oldNurse!=null) {
+                oldNurse.getPatients().remove(patient);
+                wardNurseRepository.save(oldNurse);
+            }
             patient.setNurse(null);
-            wardNurseRepository.save(oldNurse);
             for (Ward_nurse nurse : ward_nurses) {
                 if (nurse.getPatients().size() < patientNumPerNurse) {
                     nurse.addPatients(patient);
@@ -218,11 +222,13 @@ public class DoctorService {
     }
 
     public Map<String,Integer> ratingRevise(int patientID,int condition_rating){
+
         Long patientId  = new Long(patientID);
         Map<String,Integer> returnMap = new HashMap<>();
         Optional<Patient> customerOptional= patientRepository.findById(patientId);
         if (customerOptional.isPresent()) {
             Patient patient = customerOptional.get();
+            System.out.println("rating revise for patient  "+patient.getName());
             if(patient.getLiving_status()!=0){
                 returnMap.put("transSuccess",0);
             }
@@ -240,32 +246,53 @@ public class DoctorService {
         returnMap.put("transSuccess",0);
         return returnMap;
     }
+    public int rate2area(int rate){
+        int area = 0;
+        switch (rate){
+            case 0:
+                area =1;
+                break;
 
+            case 1:
+                area = 2;
+                break;
+            case 2:
+                area = 4;
+                break;
+
+        }
+        return  area;
+    }
     private void movePatient( int old_condition_rating, int old_area) {
         int isolateFlag = 0;
         Set<Patient> waitingPatient = patientRepository.findByTreatmentArea(0);
         if(!waitingPatient.isEmpty()){//隔离区有病人等待
             for(Patient patient1:waitingPatient ){
-                if(patient1.getCondition_rating()== old_condition_rating
+                System.out.println("waitint patient: "+patient1.getName());
+                if( rate2area(patient1.getCondition_rating())==old_area
                         &&patient1.getLiving_status()==0){
                     movingPresentPatient(patient1.getId(),old_condition_rating);
                     isolateFlag = 1;
-                    break;
+                   return ;
                 }
             }
 
         }
-        if(isolateFlag ==0){//隔离区没有病人
+       // if(isolateFlag ==0){//隔离区没有病人
             Iterable<Patient>wrongPatient = patientRepository.findAll();
             for(Patient patient1:wrongPatient){
-                if(patient1.getCondition_rating() == old_condition_rating
-                        &&patient1.getTreatmentArea()!= old_area
-                        &&patient1.getLiving_status()==0){
+                //if(patient1.getCondition_rating() == old_condition_rating
+                if(rate2area(patient1.getCondition_rating())!=patient1.getTreatmentArea()
+                        &&rate2area(patient1.getCondition_rating())==old_area
+                      &&patient1.getLiving_status()==0){
+                    System.out.println("wrong are patient: "+patient1.getName()+
+                            "  from "+patient1.getTreatmentArea()+" to "+old_area);
                     movingPresentPatient(patient1.getId(), old_condition_rating);
-                    break;
+                    return;
+
                 }
             }
-        }
+        //}
     }
 
 
@@ -290,7 +317,9 @@ public class DoctorService {
         Long patientId  = new Long(patientID);
         Optional<Patient> customerOptional= patientRepository.findById(patientId);
         if (customerOptional.isPresent()) {
+
             Patient patient = customerOptional.get();
+            System.out.println("status revise for patient  "+patient.getName());
             patient.setLiving_status(living_status);
             int old_condition = patient.getCondition_rating();
             int area = patient.getTreatmentArea();
@@ -304,7 +333,9 @@ public class DoctorService {
                 wardNurseRepository.save(ward_nurse);
                 patient.setBed(null);
                 patient.setNurse(null);
+                patient.setTreatmentArea(-1);
                 patientRepository.save(patient);
+                System.out.println("  leave or dead");
                 movePatient(old_condition,area);
             }
 
