@@ -230,30 +230,7 @@ public class DoctorService {
             int old_area = patient.getTreatmentArea();
             int accType = movingPresentPatient(patientId,condition_rating);
             if( accType!= -1){//当前病区移动成功
-                int isolateFlag = 0;
-                Set<Patient> waitingPatient = patientRepository.findByTreatmentArea(0);
-                if(!waitingPatient.isEmpty()){//隔离区有病人等待
-                    for(Patient patient1:waitingPatient ){
-                        if(patient1.getCondition_rating()==old_condition_rating&&patient1.getLiving_status()==0){
-                            movingPresentPatient(patient1.getId(),condition_rating);
-                            isolateFlag = 1;
-                            break;
-                        }
-                    }
-
-                }
-                if(isolateFlag ==0){//隔离区没有病人
-                    Iterable<Patient>wrongPatient = patientRepository.findAll();
-                    for(Patient patient1:wrongPatient){
-                        if(patient1.getCondition_rating() ==old_condition_rating
-                                &&patient1.getTreatmentArea()!=old_area
-                                &&patient1.getLiving_status()==0){
-                            movingPresentPatient(patient1.getId(),old_condition_rating);
-                            break;
-                        }
-                    }
-
-                }
+                movePatient(old_condition_rating, old_area);
                 returnMap.put("transSuccess",1);
                 return returnMap;//至少有一个病人移动
             }
@@ -262,6 +239,33 @@ public class DoctorService {
         //失败或者没有病人移动
         returnMap.put("transSuccess",0);
         return returnMap;
+    }
+
+    private void movePatient( int old_condition_rating, int old_area) {
+        int isolateFlag = 0;
+        Set<Patient> waitingPatient = patientRepository.findByTreatmentArea(0);
+        if(!waitingPatient.isEmpty()){//隔离区有病人等待
+            for(Patient patient1:waitingPatient ){
+                if(patient1.getCondition_rating()== old_condition_rating
+                        &&patient1.getLiving_status()==0){
+                    movingPresentPatient(patient1.getId(),old_condition_rating);
+                    isolateFlag = 1;
+                    break;
+                }
+            }
+
+        }
+        if(isolateFlag ==0){//隔离区没有病人
+            Iterable<Patient>wrongPatient = patientRepository.findAll();
+            for(Patient patient1:wrongPatient){
+                if(patient1.getCondition_rating() == old_condition_rating
+                        &&patient1.getTreatmentArea()!= old_area
+                        &&patient1.getLiving_status()==0){
+                    movingPresentPatient(patient1.getId(), old_condition_rating);
+                    break;
+                }
+            }
+        }
     }
 
 
@@ -288,6 +292,8 @@ public class DoctorService {
         if (customerOptional.isPresent()) {
             Patient patient = customerOptional.get();
             patient.setLiving_status(living_status);
+            int old_condition = patient.getCondition_rating();
+            int area = patient.getTreatmentArea();
             patientRepository.save(patient);
             if(living_status ==1||living_status==2){//出院/死亡
                 Bed bed = patient.getBed();
@@ -300,6 +306,7 @@ public class DoctorService {
                 patient.setBed(null);
                 patient.setNurse(null);
                 patientRepository.save(patient);
+                movePatient(old_condition,area);
             }
 
             return 0;
