@@ -62,6 +62,9 @@ public class Lab2Application {
                 init_bed(bedRepository, treatmentAreaRepository);
                 set_nucleic_test(nucleicAcidTestSheetRepository, patientRepository);
                 set_wardNurse_patient_bed(treatmentAreaRepository,wardNurseRepository, patientRepository,bedRepository);
+
+
+                System.out.println("Initiation finished");
             }
         };
     }
@@ -267,7 +270,7 @@ public class Lab2Application {
      */
     public void set_wardNurse_patient_bed(TreatmentAreaRepository treatmentAreaRepository, WardNurseRepository wardNurseRepository,
                                           PatientRepository patientRepository, BedRepository bedRepository){
-        //16个轻症病人，有3个护士，所以其中9个在轻症病区，3个在隔离区
+        //16个轻症病人，有3个护士，所以其中9个在轻症病区，5个在隔离区,还有1个在重症区，1个在危重
         Treatment_area treatment_area = treatmentAreaRepository.findByType(1);
         Set<Bed> beds = treatment_area.getBeds();
         Iterator<Bed> bedIterable = beds.iterator();
@@ -302,7 +305,6 @@ public class Lab2Application {
             for(int j = 1; j <= 2; j++){
                 String patientName = "patient"+(16+(i-4)*2+(j));
                 if(patientRepository.findByName(patientName)!=null){
-                    System.out.println("set for "+patientName);
                     //护士、病区、病床
                     Patient patient = patientRepository.findByName(patientName);
                     patient.setNurse(ward_nurse);
@@ -317,8 +319,19 @@ public class Lab2Application {
             //护士和病人两边都要save
             wardNurseRepository.save(ward_nurse);
         }
+        //轻症但是还在重症区的病人（因为轻症区护士都有病人）
+        Patient patient10 = patientRepository.findByName("patient10");
+        patient10.setTreatmentArea(2);
+        Ward_nurse ward_nurse6 = wardNurseRepository.findByUsername("wardNurse6");
+        patient10.setNurse(ward_nurse6);
+        ward_nurse6.addPatients(patient10);
+        Bed bed1 = bedIterable.next();
+        patient10.setBed(bed1);
+        patientRepository.save(patient10);
+        wardNurseRepository.save(ward_nurse6);
+        bedRepository.save(bed1);
 
-        //5个危重症
+        //5个危重症,6个护士7-12
         treatment_area = treatmentAreaRepository.findByType(4);
         beds = treatment_area.getBeds();
         bedIterable = beds.iterator();
@@ -340,6 +353,17 @@ public class Lab2Application {
                 wardNurseRepository.save(ward_nurse);
             }
         }
+        //轻症但是还在危重症区的病人（因为轻症区护士都有病人）
+        Patient patient11 = patientRepository.findByName("patient11");
+        patient11.setTreatmentArea(4);
+        Ward_nurse ward_nurse12 = wardNurseRepository.findByUsername("wardNurse12");
+        patient11.setNurse(ward_nurse12);
+        ward_nurse12.addPatients(patient11);
+        Bed bed2 = bedIterable.next();
+        patient11.setBed(bed2);
+        patientRepository.save(patient11);
+        wardNurseRepository.save(ward_nurse12);
+        bedRepository.save(bed2);
     }
 
     public void init_emergencyNurse(EmergencyNurseRepository emergencyNurseRepository){
