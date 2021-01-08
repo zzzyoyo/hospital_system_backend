@@ -170,6 +170,7 @@ public class WNurseService {
         float temp = addDailyRecordRequest.getTemperature();
         Date date = addDailyRecordRequest.getDate();
         String symptom = addDailyRecordRequest.getSymptom();
+        int status = addDailyRecordRequest.getStatus();
 
         Patient patient = patientRepository.findByName(username);
         if(patient ==null)
@@ -183,7 +184,7 @@ public class WNurseService {
         daily_state_records.setPatient(patient);
         daily_state_records.setTemperature( temp);
         daily_state_records.setDate(date);
-        daily_state_records.setLiving_status(patient.getLiving_status());
+        daily_state_records.setLiving_status(status);
         daily_state_records.setSymptom(symptom);
 
         daily_state_records.setNucleic_acid_test_result(result);
