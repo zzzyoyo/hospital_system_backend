@@ -267,7 +267,7 @@ public class Lab2Application {
      */
     public void set_wardNurse_patient_bed(TreatmentAreaRepository treatmentAreaRepository, WardNurseRepository wardNurseRepository,
                                           PatientRepository patientRepository, BedRepository bedRepository){
-        //16个轻症病人，有3个护士，所以其中12个在轻症病区，3个在隔离区
+        //16个轻症病人，有3个护士，所以其中9个在轻症病区，3个在隔离区
         Treatment_area treatment_area = treatmentAreaRepository.findByType(1);
         Set<Bed> beds = treatment_area.getBeds();
         Iterator<Bed> bedIterable = beds.iterator();

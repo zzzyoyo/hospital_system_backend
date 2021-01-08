@@ -55,7 +55,7 @@ public class ENurseController {
         logger.debug("get a emergencyNurse select ");
 
         System.out.println("get a emergencyNurse select ");
-        return ResponseEntity.ok(eNurseService.selectAll(eNurseSelectRequest.getArea_type(), eNurseSelectRequest.getIsolated(), eNurseSelectRequest.getRating(), eNurseSelectRequest.getRating()));    //有参ok 返回HttpStatus状态码和body内容
+        return ResponseEntity.ok(eNurseService.selectAll(eNurseSelectRequest.getArea_type(), eNurseSelectRequest.getRating(), eNurseSelectRequest.getStatus()));    //有参ok 返回HttpStatus状态码和body内容
 
     }
 }

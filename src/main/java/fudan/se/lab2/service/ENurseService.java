@@ -75,7 +75,7 @@ public class ENurseService {
      * @param status
      * @return
      */
-    public Map<String, Set> selectAll(int area_type,int isolated,int rating,int status){
+    public Map<String, Set> selectAll(int area_type,int rating,int status){
         Map <String,Set>returnMap = new HashMap<>();
         Iterable<Patient> patients = selectStatus(selectRating(selectArea(area_type),rating),status);
 
@@ -86,6 +86,7 @@ public class ENurseService {
             temp.put("username",patient.getName());
             temp.put("condition_rating",patient.getCondition_rating());
             temp.put("living_status",patient.getLiving_status());
+            temp.put("area", patient.getTreatmentArea());
             p_set.add(temp);
         }
         returnMap.put("patient_tableData",p_set);
@@ -121,6 +122,7 @@ public class ENurseService {
         return areaPatients;
     }
     public Iterable <Patient> selectStatus(Iterable<Patient> ratingPatients,int status){
+        System.out.println("selectStatus:status="+status);
         Set<Patient> statusPatients = new HashSet<>();
         if(status ==1||status ==2||status ==0){
             for(Patient patient:ratingPatients){
