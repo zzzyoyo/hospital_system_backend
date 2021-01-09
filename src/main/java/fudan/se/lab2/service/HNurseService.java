@@ -222,7 +222,12 @@ public class HNurseService {
         Set<Bed> beds = treatmentAreaRepository.findByType(type).getBeds();
         Set<Ward_nurse> ward_nurses = treatmentAreaRepository.findByType(type).getWard_nurses();
         int bedNum = beds.size();
-        int patientNum = patientRepository.findByTreatmentArea(type).size();
+        Set<Patient> allAreaP = patientRepository.findByTreatmentArea(type);
+        int patientNum = 0;
+        for(Patient patient1:allAreaP){
+            if(patient1.getLiving_status() == 0)
+                patientNum++;
+        }
         int nurseNum = ward_nurses.size();
         System.out.println("bed Num: "+bedNum+"  ,patientNum "+patientNum+
                 "   nurseNum * patientNumPerNurse: "+ nurseNum * patientNumPerNurse);

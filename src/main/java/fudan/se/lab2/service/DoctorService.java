@@ -176,7 +176,13 @@ public class DoctorService {
         Set<Bed> beds = treatmentAreaRepository.findByType(type).getBeds();
         Set<Ward_nurse> ward_nurses = treatmentAreaRepository.findByType(type).getWard_nurses();
         int bedNum = beds.size();
-        int patientNum = patientRepository.findByTreatmentArea(type).size();
+        //int patientNum = patientRepository.findByTreatmentArea(type).size();
+        Set<Patient> allAreaP = patientRepository.findByTreatmentArea(type);
+        int patientNum = 0;
+        for(Patient patient1:allAreaP){
+            if(patient1.getLiving_status() == 0)
+                patientNum++;
+        }
         int nurseNum = ward_nurses.size();
         System.out.println("bed Num: "+bedNum+"  ,patientNum "+patientNum+
                 "   nurseNum * patientNumPerNurse: "+ nurseNum * patientNumPerNurse);
@@ -336,7 +342,7 @@ public class DoctorService {
                 wardNurseRepository.save(ward_nurse);
                 patient.setBed(null);
                 patient.setNurse(null);
-                patient.setTreatmentArea(-1);
+               // patient.setTreatmentArea(-1);
                 patientRepository.save(patient);
                 System.out.println("  leave or dead");
                 movePatient(old_condition,area);
@@ -556,7 +562,9 @@ public class DoctorService {
             throw new UsernameNotFoundException(username);
         if(patient.getLiving_status() !=0)
             return "patient die";
+        int old_condition = patient.getCondition_rating();
         int old_area = patient.getTreatmentArea();
+        patient.setCondition_rating(condition_rating);
         Nucleic_acid_test_sheet nucleic_acid_test_sheet = new Nucleic_acid_test_sheet();
         nucleic_acid_test_sheet.setPatient(patient);
         nucleic_acid_test_sheet.setResult(result);
@@ -567,6 +575,7 @@ public class DoctorService {
         patientRepository.save(patient);
        if(old_area!=movingPresentPatient(patient.getId(),condition_rating)){
            System.out.println("move patient because of new condition_rating");
+           movePatient(old_condition,old_area);
        };
         return "success";
 
